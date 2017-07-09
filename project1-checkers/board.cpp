@@ -4,7 +4,9 @@
 
 using namespace std;
 
-
+Color::Modifier m_red(Color::FG_RED);
+Color::Modifier m_green(Color::FG_GREEN);
+Color::Modifier m_def(Color::FG_DEFAULT);
 int i, j, k; 
 
 //player 1 and player 2
@@ -43,24 +45,31 @@ int **Board::init(){
 
 int **Board::cust(string player_color, int player_num){
 	i = 0; 
-	string next; 
+	string next, king; 
 	while(i ==0){
 		int input_row, input_col; 
-		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit"; 
+		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
 		cin >> input_row; 
 		if (input_row == 0){
 			i++; //HERE!! what if they just want to quit and restart 
 		}
 		else if(0< input_row <= row){ //This is where they input the column
-			cout<< "Type col of "<< player_color << " from 1-8";
+			cout<< "Type col of "<< player_color << " from 1-8. ";
 			cin>> input_col; 
 			if((0<input_col) && (input_col<= col) && (((input_col+input_row)%2) == 0)){
-				arr[input_row-1][input_col-1] = player_num; //HERE! how to declare player and add king 
-				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
-					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue"; 
+				cout << "Type 'Y' if that piece is a king and 'N' if not. ";
+				cin >> king; 
+				if (king == "Y"){
+					arr[input_row-1][input_col-1] = player_num+2;
 				}
 				else{
-					cout << "Are you done? 'Y' to start the game, 'N' to continue" ;
+					arr[input_row-1][input_col-1] = player_num;
+				}
+				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
+					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue. "; 
+				}
+				else{
+					cout << "Are you done? 'Y' to start the game, 'N' to continue. " ;
 				}
 				cin >> next; 
 				if (next == "Y"){
@@ -68,11 +77,11 @@ int **Board::cust(string player_color, int player_num){
 				}
 			}
 			else{
-				cout<< "that's an invalid input, please try again" <<endl; 
+				cout<< "that's an invalid input, please try again. " <<endl; 
 			}
 		}
 		else{
-			cout<< "that's an invalid input, please try again" <<endl; 
+			cout<< "that's an invalid input, please try again. " <<endl; 
 		}
 	}
 	return arr; 
@@ -99,64 +108,83 @@ int **Board::norm(){
 
 void Board::print_board(){
 
-
-	cout << "0	1	2	3	4	5	6	7	8"<<endl; 
-	cout << "==	=	=	=	=	=	=	=	="<<"\n\n";
-	for(i = 0; i<row; i++){ 
-		cout  <<i+1 <<" ||" << "\t"; 
-		for(j = 0; j<col; j++){
-			cout<< arr[i][j] << "\t";
+	cout << "_________________" << endl;
+	for(i = 0; i < row; i++){
+		for(j = 0; j < col; j++){
+			cout << "|";
+			switch(arr[i][j]){
+				case 0:
+					cout << " ";
+					break;
+				case 1:
+					cout << m_red << "*" << m_def;
+					break;
+				case 2:
+					cout << m_green << "*" << m_def;
+					break;
+				case 3:
+					cout << m_red << "O" << m_def;
+					break;
+				case 4:
+					cout << m_green << "O" << m_def;
+			}
 		}
-		cout<<"\n\n";
+		cout << "|" << endl;
 	}
-	cout << endl; 
+	cout << "-----------------" << endl;
 }
 
 //ADD ENDGAME OPTIONS AFTER EACH PRINTBOARD
 
-class Player{
+class Piece{
 	//stores their positions 
 	public: 
+		Piece(string, int);
+		void setVal(int);
+		void makeKing();
+	private:
 		string color; //player red or black 
 		int num; //player 1 or player 2
-		void setvalues(string, int)
-	private: 
-		int val_norm; 
+		bool is_king; // whether king or not
+		float val; // for AI stuff
 };
 
-class King: public Player{
-	private:
-		int val_king; 
+Piece::Piece(string color, int num){
+	this->num = num; 
+	this->color = color; 
+	is_king = false;
+	val = 1.0f; 
 }
 
-void Player::setvalues(string player_color, int player_num){
-	color = player_color;
-	num = player_num; 
+void Piece::setVal(int val){
+	this->val = val;
 }
 
-
+void Piece::makeKing(){
+	is_king = true; 
+	val = 1.8f; 
+}
 
 int main(void){
 
-
 	char val;
 	string input_color, new_input_color;
-	cout << "Type 'A' for a new game or 'B' for a customizeable board (note: board is up vs. down, black is on the bottom and starts first unless you customize)"; 
-	cin >> val;  
+	cout << "Type 'A' for a new game or 'B' for a customizeable board (note: board is up vs. down, black is on the bottom and starts first unless you customize). "; 
+	cin >> val;   
 
 	Board board;
 	board.set_dimensions(8,8); 
 	board.init(); 
-	Player player1;
-	Player player2; 
+	// Player player1;
+	// Player player2; 
 
 	if(val == 'A'){
 		board.norm();
-		player1.setvalues(BLACK, 1);
-		player2.setvalues(RED, 2);
+		// player1.setvalues(BLACK, 1);
+		// player2.setvalues(RED, 2);
 	}
 	else{
-		cout << "'RED' or 'BLACK' starting first?"; 
+		cout << "'RED' or 'BLACK' starting first?. "; 
 		cin >> input_color;
 		board.cust(input_color, 1);
 		if (input_color == "BLACK"){
