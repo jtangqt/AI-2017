@@ -134,6 +134,9 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
+// function determine and print all possible moves for the player
+// 
+
 //ADD ENDGAME OPTIONS AFTER EACH PRINTBOARD
 
 class Piece{
