@@ -13,10 +13,6 @@ int i, j, k;
 //player 1 - black unless starting in the middle of the game
 //player 2 - red
 
-//legal moves implementation
-//need to be able to print this out
-
-//after legal moves implementation, make .h file for include
 
 class Board{
 	private:
@@ -134,16 +130,30 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
+class Move{
+	int curr_x;
+	int curr_y;
+	int new_x;
+	int new_y;
+	Move *next_move; //HERE!!
+};
 
-void Board::hyp_moves(int a, int b, int c, bool d){//HERE!! bool determines if it is a king or not
+
+void Board::hyp_moves(int row, int col, int c, bool d, list<Move> & moves){//HERE!! bool determines if it is a king or not
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
 	int x, int y, int z; 
 
-	x=arr[a][b]; //HERE!! add for player moving downward
-	y = arr[a+1][b+1];
-	z =arr[a+1][b-1];
+	x=arr[row][col]; 
+	if(c = 1){
+		i = row-1; 
+	}
+	else{
+		i = row+1; 
+	}
+	y = arr[i][col+1];
+	z =arr[i][col-1];
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
 		if((y == x+1) && (y== x-1) &&(z == x+1) && (z == x-1)){
 			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl;
@@ -167,7 +177,7 @@ void Board::hyp_moves(int a, int b, int c, bool d){//HERE!! bool determines if i
 		else{
 			cout<< "Move piece #" <<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl; 
 		}
-	}
+	}//HERE!! return move
 }
 
 void Board::player_move(int a, int b){
@@ -225,26 +235,28 @@ void Piece::set_y(int y){ this->y = y; }
 int Piece::get_x(){ return x; }
 int Piece::get_y(){ return y; }
 
-int determine_move(int player_num){ 
+int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 //for all of the pieces for one player, determine all of the moves it can make
 	int c; 
-	for(i = 0; i< lengthof(); i++){//HERE!!
-		int x = piece#.position_x();
-		int y = piece#.position_y(); //HERE!!
-		board.hyp_moves(x, y, #);//HERE!!
+	std::list<Move> move; 
+	for(i = 0; i< pieces.size(); i++){
+		int x = pieces[i].get_x();
+		int y = pieces[i].get_y(); //HERE!!
+		
+		if(pieces[i].isKing == true){
+			j =1;
+		}
+		else{
+			j = 0; 
+		}
+
+		Move piece_moves = board.hyp_moves(x, y, player_num, j);//HERE!!
+		move.push_back(piece_moves); //HERE!!
+		}
 	}
-	cout << "Which piece number do you want to move?" << endl; 
+	cout << "Which move do you want to make?" << endl; 
 	cin >> c;
 	return c;  
-}
-
-player_turn(int player_num){
-	
-	int c = determine_move(player_num); 
-
-	piece#.position_x(); //HERE!! piece #c  
-	piece#.position_y(); 
-	
 }
 
 int main(void){
@@ -256,9 +268,10 @@ int main(void){
 
 	Board board;
 	board.set_dimensions(8,8); 
-	board.init(); 
-	// Player player1;
-	// Player player2; 
+	board.init(); 	
+
+	std::list<Piece> player1;
+	std::list<Piece> player2;
 
 	if(val == 'A'){
 		board.norm();
