@@ -135,13 +135,13 @@ void Board::print_board(){
 }
 
 
-void Board::hyp_moves(int a, int b, int c){
+void Board::hyp_moves(int a, int b, int c, bool d){//HERE!! bool determines if it is a king or not
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
 	int x, int y, int z; 
 
-	x=arr[a][b];
+	x=arr[a][b]; //HERE!! add for player moving downward
 	y = arr[a+1][b+1];
 	z =arr[a+1][b-1];
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
@@ -245,7 +245,7 @@ int main(void){
 
 	char val;
 	string input_color, new_input_color;
-	cout << "Type 'A' for a new game or 'B' for a customizeable board (note: board is up vs. down, black is on the bottom and starts first unless you customize). "; 
+	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
 	cin >> val;   
 
 	Board board;
@@ -260,6 +260,7 @@ int main(void){
 		// player2.setvalues(RED, 2);
 	}
 	else{
+		cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
 		cout << "'RED' or 'BLACK' starting first?. "; 
 		cin >> input_color;
 		board.cust(input_color, 1);
