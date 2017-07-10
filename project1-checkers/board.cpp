@@ -135,7 +135,7 @@ void Board::print_board(){
 }
 
 
-void Board::hyp_moves(int a, int b){
+void Board::hyp_moves(int a, int b, int c){
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
@@ -144,28 +144,32 @@ void Board::hyp_moves(int a, int b){
 	z =arr[a+1][b-1];
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
 		if((y == x+1) && (y== x-1) &&(z == x+1) && (z == x-1)){
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl;
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl;
+			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl;
+			cout<< "Move piece #" <<c<<"  at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl;
 		}
 		else if((z == x+1) || (z == x-1)){
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl; 
+			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl; 
 		}
 		else(){
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl; 
+			cout<< "Move piece #"<<c<< " at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl; 
 		}
 	}
 	else if(y == NULL|| z== NULL){
 		if((z == NULL) && (y== NULL)){
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl;
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl;
+			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl;
+			cout<< "Move piece #" <<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl;
 		}
 		else if(z == NULL){
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl; 
+			cout<< "Move piece #"<<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl; 
 		}
 		else{
-			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl; 
+			cout<< "Move piece #" <<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl; 
 		}
 	}
+}
+
+Board::player_move(int x, int y){
+	
 }
 
 // function determine and print all possible moves for the player
@@ -206,18 +210,26 @@ void Piece::make_king(){
 	val = 1.8f; 
 }
 
-void print_all_moves(){
+int determine_move(int player_num){ 
 //for all of the pieces for one player, determine all of the moves it can make
-	for(i = 0; i< lengthof(); i++){
+	int c; 
+	for(i = 0; i< lengthof(); i++){//HERE!!
 		int x = piece#.position_x();
 		int y = piece#.position_y(); //HERE!!
-		board.hyp_moves(x, y);
+		board.hyp_moves(x, y, #);//HERE!!
 	}
+	cout << "Which piece number do you want to move?" << endl; 
+	cin >> c;
+	return c;  
 }
 
-player_turn(){
+player_turn(int player_num){
+	
+	int c = determine_move(player_num); 
 
-	board.move_piece(x, y); 
+	piece#.position_x(); //HERE!! piece #c  
+	piece#.position_y(); 
+	
 }
 
 int main(void){
