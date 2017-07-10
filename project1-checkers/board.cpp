@@ -188,15 +188,16 @@ void Board::player_move(int a, int b){
 
 class Piece{
 	//stores their positions 
-	int x; 
-	int y; 
 	public: 
 		Piece(string, int);
 		void set_val(int);
 		void make_king();
-		int position_x(){return(x)};
-		int position_y(){return(y)}; 
+		void set_x(int);
+		void set_y(int);
+		int get_x();
+		int get_y();
 	private:
+		int x, y;
 		string color; //player red or black 
 		int num; //player 1 or player 2
 		bool isKing; // whether king or not
@@ -218,6 +219,11 @@ void Piece::make_king(){
 	isKing = true; 
 	val = 1.8f; 
 }
+
+void Piece::set_x(int x){ this->x = x; }
+void Piece::set_y(int y){ this->y = y; }
+int Piece::get_x(){ return x; }
+int Piece::get_y(){ return y; }
 
 int determine_move(int player_num){ 
 //for all of the pieces for one player, determine all of the moves it can make
