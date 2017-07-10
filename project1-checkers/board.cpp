@@ -45,7 +45,7 @@ int **Board::init(){
 
 int **Board::cust(string player_color, int player_num){
 	i = 0; 
-	string next, king; 
+	string next, king; //HERE!! make sure to add king
 	while(i ==0){
 		int input_row, input_col; 
 		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
@@ -134,6 +134,40 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
+
+void Board::hyp_moves(int a, int b){
+	//no piece there (moves the piece)
+	//your piece there (doesn't print anything)
+	//other player piece there (eats the piece)
+	x=arr[a][b];
+	y = arr[a+1][b+1];
+	z =arr[a+1][b-1];
+	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
+		if((y == x+1) && (y== x-1) &&(z == x+1) && (z == x-1)){
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl;
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl;
+		}
+		else if((z == x+1) || (z == x-1)){
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl; 
+		}
+		else(){
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl; 
+		}
+	}
+	else if(y == NULL|| z== NULL){
+		if((z == NULL) && (y== NULL)){
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl;
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl;
+		}
+		else if(z == NULL){
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl; 
+		}
+		else{
+			cout<< "Move piece at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl; 
+		}
+	}
+}
+
 // function determine and print all possible moves for the player
 // 
 
@@ -141,31 +175,49 @@ void Board::print_board(){
 
 class Piece{
 	//stores their positions 
+	int x; 
+	int y; 
 	public: 
 		Piece(string, int);
-		void setVal(int);
-		void makeKing();
+		void set_val(int);
+		void make_king();
+		int position_x(){return(x)};
+		int position_y(){return(y)}; 
 	private:
 		string color; //player red or black 
 		int num; //player 1 or player 2
-		bool is_king; // whether king or not
+		bool isKing; // whether king or not
 		float val; // for AI stuff
 };
 
 Piece::Piece(string color, int num){
 	this->num = num; 
 	this->color = color; 
-	is_king = false;
+	isKing = false;
 	val = 1.0f; 
 }
 
-void Piece::setVal(int val){
+void Piece::set_val(int val){
 	this->val = val;
 }
 
-void Piece::makeKing(){
-	is_king = true; 
+void Piece::make_king(){
+	isKing = true; 
 	val = 1.8f; 
+}
+
+void print_all_moves(){
+//for all of the pieces for one player, determine all of the moves it can make
+	for(i = 0; i< lengthof(); i++){
+		int x = piece#.position_x();
+		int y = piece#.position_y(); //HERE!!
+		board.hyp_moves(x, y);
+	}
+}
+
+player_turn(){
+
+	board.move_piece(x, y); 
 }
 
 int main(void){
