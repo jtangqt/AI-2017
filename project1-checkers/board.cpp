@@ -139,6 +139,8 @@ void Board::hyp_moves(int a, int b, int c){
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
+	int x, int y, int z; 
+
 	x=arr[a][b];
 	y = arr[a+1][b+1];
 	z =arr[a+1][b-1];
@@ -168,8 +170,15 @@ void Board::hyp_moves(int a, int b, int c){
 	}
 }
 
-Board::player_move(int x, int y){
+void Board::player_move(int a, int b){
+	int x, int y, int z; 
+
+	x=arr[a][b];
+	y = arr[a+1][b+1];
+	z =arr[a+1][b-1];
 	
+
+
 }
 
 // function determine and print all possible moves for the player
