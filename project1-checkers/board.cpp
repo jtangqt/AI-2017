@@ -23,9 +23,10 @@ class Board{
 	public: 
 		void set_dimensions(int, int); 
 		void print_board(); 
-		int **cust(string, int);
-		int **norm();
-	 	int **init();
+		list <Piece> cust(string, int);
+		void norm();
+	 	void init();
+	 	list<Move> Board::hyp_moves(int, int, int, bool)
 };
 
 void Board::set_dimensions(int row, int col){
@@ -33,20 +34,20 @@ void Board::set_dimensions(int row, int col){
 	this -> col = col; 
 }
 
-int **Board::init(){
+void Board::init(){
 	arr = new int*[row];
 	for(i = 0; i < row; ++i){
 		arr[i] = new int [col];
 	}
-	return arr; 
 }
 
 void Board::add_piece(){}//HERE!!
 void Board::delete_piece(){}//HERE!!
 
-int **Board::cust(string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
+list <Piece> Board::cust(string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
 	i = 0; 
 	string next, king; 
+	std::list <Piece> player_pieces;
 	while(i ==0){
 		int input_row, input_col; 
 		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
@@ -57,15 +58,18 @@ int **Board::cust(string player_color, int player_num){ //HERE!! I need to set x
 		else if(0< input_row <= row){ //This is where they input the column
 			cout<< "Type col of "<< player_color << " from 1-8. ";
 			cin>> input_col; 
+			Piece piece(player_color, player_num, input_row, input_col); 
 			if((0<input_col) && (input_col<= col) && (((input_col+input_row)%2) == 0)){
 				cout << "Type 'Y' if that piece is a king and 'N' if not. ";
 				cin >> king; 
 				if (king == "Y"){
 					arr[input_row-1][input_col-1] = player_num+2;
+					piece.make_king();
 				}
 				else{
 					arr[input_row-1][input_col-1] = player_num;
 				}
+				player_pieces.push_back(piece)
 				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
 					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue. "; 
 				}
@@ -85,10 +89,9 @@ int **Board::cust(string player_color, int player_num){ //HERE!! I need to set x
 			cout<< "that's an invalid input, please try again. " <<endl; 
 		}
 	}
-	return arr; 
 }
 
-int **Board::norm(){
+void Board::norm(){
 	
 	//player 1 on the bottom (BLACK)
 	//player 2 on top (RED)
@@ -103,8 +106,6 @@ int **Board::norm(){
 			}
 		}
 	}
-
-	return arr; 
 }
 
 void Board::print_board(){
@@ -135,7 +136,7 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
-list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to output few moves?
+list<Move> Board::hyp_moves(int row, int col, int c, bool d){
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
@@ -147,11 +148,14 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to out
 	if(c = 1){
 		i = row-1; 
 		j = row -2; 
+		b = 2;
 	}
 	else{
 		i = row+1; 
 		j = row+2; 
+		b = 1; 
 	}
+
 	y = arr[i][col+1];
 	z =arr[i][col-1];
 	k = 0;
@@ -201,6 +205,12 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to out
 			move_pieces.push_back(move_piece);
 		}
 	}
+
+	if(d = 1){
+		std::list<Move> move_king; 
+		move_king = (Board).hyp_moves(row, col, b, 0)
+		move_pieces.pushback(move_king);
+	}
 	//HERE!! check for wall 
 	return move_pieces;
 }
@@ -230,10 +240,10 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 			j = 0; 
 		}
 
-		move_pieces = board.hyp_moves(row, col, player_num, j);//HERE!! what kind of function do i need to return a move object?
+		move_pieces = board.hyp_moves(row, col, player_num, j);
 		move.splice(move.end(), move_pieces); 
-		}
 	}
+	
 	cout << "Which move do you want to make?" << endl; //HERE!! continue on 
 }
 
@@ -245,15 +255,15 @@ void customize_board(Board object, list<Piece> &player1, list<Piece> &player2){
 	cout << "'RED' or 'BLACK' starting first?. "; 
 	cin >> input_color;
 	
-	board.cust(input_color, 1);
+	player1 = board.cust(input_color, 1);
 	
 	if (input_color == "BLACK"){
 		new_input_color = "RED";
-		board.cust(new_input_color, 2);//HERE! create individual pieces in player
+		player2 = board.cust(new_input_color, 2);//HERE! create individual pieces in player
 	}
 	else{
 		new_input_color = "BLACK";
-		board.cust(new_input_color, 2);
+		player2 = board.cust(new_input_color, 2);
 	}
 }
 
