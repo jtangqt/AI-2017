@@ -1,5 +1,7 @@
 #include <iostream>
 #include "colormod.h"
+#include "piece.hpp"
+#include "move.hpp"
 
 
 using namespace std;
@@ -133,26 +135,6 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
-class Move{
-	int curr_x, curr_y, new_x, new_y, num;//num = where it is on the list
-	Move *next_move; 
-	public:
-		void set_curr_x, set_curr_y, set_new_x, set_new_y, set_num;
-};
-
-void Move::set_val(int curr_x, int curr_y, int new_x, int new_y, int num){ 
-	this -> curr_x;
-	this -> curr_y;
-	this -> new_x;
-	this -> new_y;
-	this -> num = num;
-}
-
-void Move::clear_val(){
-	curr_x = curr_y = new_x = new_y = set_num = 0;
-}
-
-
 list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to output few moves?
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
@@ -237,48 +219,6 @@ void Board::player_move(int a, int b){
 	z =arr[a+1][b-1];
 	
 }
-
-class Piece{
-	//stores their positions 
-	public: 
-		Piece(string, int);
-		void set_val(int);
-		void make_king();
-		void set_x(int);
-		void set_y(int);
-		int get_x();
-		int get_y();
-	private:
-		int x, y;
-		string color; //player red or black 
-		int num; //player 1 or player 2
-		bool isKing; // whether king or not
-		float val; // for AI stuff
-};
-
-Piece::Piece(string color, int num){
-	this->num = num; 
-	this->color = color; 
-	isKing = false;
-	val = 1.0f; 
-}
-
-void Piece::set_val(int val){
-	this->val = val;
-}
-
-void Piece::make_king(){
-	isKing = true; 
-	val = 1.8f; 
-}
-
-void Piece::set_val(int x, int y){ 
-	this->x = x; 
-	this->y = y; 
-} //HERE!! I need to set x's and y's
-
-int Piece::get_x(){ return x; }
-int Piece::get_y(){ return y; }
 
 int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 //for all of the pieces for one player, determine all of the moves it can make
