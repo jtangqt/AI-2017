@@ -110,7 +110,8 @@ list<Piece> Board::norm(int player_num){
 		for(j = 0; j< col; j++){
 			if ((k <= i <= k+2) && (i+j)%2 == 0){
 				arr[i][j] = player_num;
-				Piece normal_pieces(color, player_num, i, j);
+				Piece normal_pieces(color, player_num, i, j);//HERE!!
+				norm_pieces.push_back(normal_pieces);
 			}
 		}
 	}
