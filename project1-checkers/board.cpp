@@ -91,18 +91,26 @@ list <Piece> Board::cust(string player_color, int player_num){ //HERE!! I need t
 	}
 }
 
-void Board::norm(){
+list<Piece> Board::norm(int player_num){
 	
 	//player 1 on the bottom (BLACK)
 	//player 2 on top (RED)
+	list<Piece> norm_pieces;
+	string color
+
+	if (player_num = 1){
+		k = 5;
+		color = "BLACK";
+	}
+	else{
+		k = 0; 
+	}
 
 	for(i = 0; i <row; i++){
 		for(j = 0; j< col; j++){
-			if ((i < 3) && (i+j)%2 == 0){
-				arr[i][j] = 2; 
-			}
-			if((i > 4) && ((i+j)%2 == 0)){
-				arr[i][j] = 1; 
+			if ((k <= i <= k+2) && (i+j)%2 == 0){
+				arr[i][j] = player_num;
+				Piece normal_pieces(color, player_num, i, j);
 			}
 		}
 	}
@@ -247,35 +255,11 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 	cout << "Which move do you want to make?" << endl; //HERE!! continue on 
 }
 
-void customize_board(Board object, list<Piece> &player1, list<Piece> &player2){
-
-	string input_color, new_input_color;
-
-	cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
-	cout << "'RED' or 'BLACK' starting first?. "; 
-	cin >> input_color;
-	
-	player1 = board.cust(input_color, 1);
-	
-	if (input_color == "BLACK"){
-		new_input_color = "RED";
-		player2 = board.cust(new_input_color, 2);//HERE! create individual pieces in player
-	}
-	else{
-		new_input_color = "BLACK";
-		player2 = board.cust(new_input_color, 2);
-	}
-}
-
-void normal_board(Board object, list<Piece> &player1, list<Piece> &player2){
-	board.norm();
-	// player1.setvalues(BLACK, 1); HERE!! Create objects 
-	// player2.setvalues(RED, 2);
-}
 
 int main(void){
 
 	char val;
+	string input_color, new_input_color;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
 	cin >> val;   
 
@@ -290,7 +274,20 @@ int main(void){
 		normal_board(board, player1, player2);
 	}
 	else{
-		customize_board(board, player1, player2); 
+		cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
+		cout << "'RED' or 'BLACK' starting first?. "; 
+		cin >> input_color;
+		
+		player1 = board.cust(input_color, 1);
+		
+		if (input_color == "BLACK"){
+			new_input_color = "RED";
+			player2 = board.cust(new_input_color, 2);//HERE! create individual pieces in player
+		}
+		else{
+			new_input_color = "BLACK";
+			player2 = board.cust(new_input_color, 2);
+		}
 	}
 	board.print_board(); 
 
