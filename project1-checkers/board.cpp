@@ -39,9 +39,12 @@ int **Board::init(){
 	return arr; 
 }
 
+void Board::add_piece(){}//HERE!!
+void Board::delete_piece(){}//HERE!!
+
 int **Board::cust(string player_color, int player_num){
 	i = 0; 
-	string next, king; //HERE!! make sure to add king
+	string next, king; 
 	while(i ==0){
 		int input_row, input_col; 
 		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
@@ -131,53 +134,99 @@ void Board::print_board(){
 }
 
 class Move{
-	int curr_x;
-	int curr_y;
-	int new_x;
-	int new_y;
-	Move *next_move; //HERE!!
+	int curr_x, curr_y, new_x, new_y, num;//num = where it is on the list
+	Move *next_move; 
+	public:
+		void set_curr_x, set_curr_y, set_new_x, set_new_y, set_num;
 };
 
+void Move::set_val(int curr_x, int curr_y, int new_x, int new_y, int num){ 
+	this -> curr_x;
+	this -> curr_y;
+	this -> new_x;
+	this -> new_y;
+	this -> num = num;
+}
 
-void Board::hyp_moves(int row, int col, int c, bool d, list<Move> & moves){//HERE!! bool determines if it is a king or not
+void Move::clear_val(){
+	curr_x = curr_y = new_x = new_y = set_num = 0;
+}
+
+
+list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to output few moves?
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
-	int x, int y, int z; 
+	int x, y, z; 
+
+	std::list<Move> move_pieces;
 
 	x=arr[row][col]; 
 	if(c = 1){
 		i = row-1; 
+		j = row -2; 
 	}
 	else{
 		i = row+1; 
+		j = row+2; 
 	}
 	y = arr[i][col+1];
 	z =arr[i][col-1];
+	k = 0;
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
 		if((y == x+1) && (y== x-1) &&(z == x+1) && (z == x-1)){
-			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl;
-			cout<< "Move piece #" <<c<<"  at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl;
+			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl;
+			cout<< "Move piece #" <<c<<"  at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col+2<<endl;
+			Move eat_piece, eat_piece2;
+			eat_piece.set_val(row, col, j, col-2, k);
+			k++;
+			eat_piece2.set_val(row, col, j, col+2, k);
+			k++;
+			move_pieces.push_back(move_pieces.end(), {eat_piece, eat_piece2});
 		}
 		else if((z == x+1) || (z == x-1)){
-			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b-2<<endl; 
-		}
-		else(){
-			cout<< "Move piece #"<<c<< " at row " << a <<"and column " << b << "to row "<<a+2<<"and column "<<b+2<<endl; 
-		}
-	}
-	else if(y == NULL|| z== NULL){
-		if((z == NULL) && (y== NULL)){
-			cout<< "Move piece #" <<c<<" at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl;
-			cout<< "Move piece #" <<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl;
-		}
-		else if(z == NULL){
-			cout<< "Move piece #"<<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b-1<<endl; 
+			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl; 
+			Move eat_piece;
+			eat_piece.set_val(row, col, j, col-2, k);
+			move_pieces.push_back(eat_piece);
+			k++;
 		}
 		else{
-			cout<< "Move piece #" <<c<< " at row " << a <<"and column " << b << "to row "<<a+1<<"and column "<<b+1<<endl; 
+			cout<< "Move piece #"<<c<< " at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col+2<<endl; 
+			Move eat_piece;
+			eat_piece.set_val(row, col, j, col+2, k);
+			move_pieces.push_back(eat_piece);
+			k++;
 		}
-	}//HERE!! return move
+	}
+	if(y == NULL|| z== NULL){ //when the box diagonal is empty
+		if((z == NULL) && (y== NULL)){
+			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl;
+			cout<< "Move piece #" <<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col+1<<endl;
+			Move move_piece, move_piece2;
+			move_piece.set_val(row, col, j, col-1, k);
+			k++;
+			move_piece2.set_val(row, col, j, col+1, k);
+			k++;			
+			move_pieces.push_back(move_pieces.end(), {move_piece, move_piece2});
+		}
+		else if(z == NULL){
+			cout<< "Move piece #"<<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl; 
+			Move move_piece;
+			move_piece.set_val(row, col, j, col-1, k);
+			k++;
+			move_pieces.push_back(move_piece);
+		}
+		else{
+			cout<< "Move piece #" <<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col+1<<endl; 
+			Move move_piece;
+			move_piece.set_val(row, col, j, col+1, k);
+			k++;
+			move_pieces.push_back(move_piece);
+		}
+	}
+	//HERE!! check for wall 
+	return move_pieces;
 }
 
 void Board::player_move(int a, int b){
@@ -187,14 +236,7 @@ void Board::player_move(int a, int b){
 	y = arr[a+1][b+1];
 	z =arr[a+1][b-1];
 	
-
-
 }
-
-// function determine and print all possible moves for the player
-// 
-
-//ADD ENDGAME OPTIONS AFTER EACH PRINTBOARD
 
 class Piece{
 	//stores their positions 
@@ -230,8 +272,11 @@ void Piece::make_king(){
 	val = 1.8f; 
 }
 
-void Piece::set_x(int x){ this->x = x; }
-void Piece::set_y(int y){ this->y = y; }
+void Piece::set_val(int x, int y){ 
+	this->x = x; 
+	this->y = y; 
+} //HERE!! I need to set x's and y's
+
 int Piece::get_x(){ return x; }
 int Piece::get_y(){ return y; }
 
@@ -239,9 +284,10 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 //for all of the pieces for one player, determine all of the moves it can make
 	int c; 
 	std::list<Move> move; 
+	std::list<Move> move_pieces; 
 	for(i = 0; i< pieces.size(); i++){
 		int x = pieces[i].get_x();
-		int y = pieces[i].get_y(); //HERE!!
+		int y = pieces[i].get_y(); 
 		
 		if(pieces[i].isKing == true){
 			j =1;
@@ -250,19 +296,42 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 			j = 0; 
 		}
 
-		Move piece_moves = board.hyp_moves(x, y, player_num, j);//HERE!!
-		move.push_back(piece_moves); //HERE!!
+		move_pieces = board.hyp_moves(x, y, player_num, j);//HERE!! what kind of function do i need to return a move object?
+		move.splice(move.end(), move_pieces); 
 		}
 	}
-	cout << "Which move do you want to make?" << endl; 
-	cin >> c;
-	return c;  
+	cout << "Which move do you want to make?" << endl; //HERE!! continue on 
+}
+
+void customize_board(Board object, list<Piece> &player1, list<Piece> &player2){
+
+	string input_color, new_input_color;
+
+	cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
+	cout << "'RED' or 'BLACK' starting first?. "; 
+	cin >> input_color;
+	
+	board.cust(input_color, 1);
+	
+	if (input_color == "BLACK"){
+		new_input_color = "RED";
+		board.cust(new_input_color, 2);//HERE! create individual pieces in player
+	}
+	else{
+		new_input_color = "BLACK";
+		board.cust(new_input_color, 2);
+	}
+}
+
+void normal_board(Board object, list<Piece> &player1, list<Piece> &player2){
+	board.norm();
+	// player1.setvalues(BLACK, 1); HERE!! Create objects 
+	// player2.setvalues(RED, 2);
 }
 
 int main(void){
 
 	char val;
-	string input_color, new_input_color;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
 	cin >> val;   
 
@@ -274,28 +343,15 @@ int main(void){
 	std::list<Piece> player2;
 
 	if(val == 'A'){
-		board.norm();
-		// player1.setvalues(BLACK, 1);
-		// player2.setvalues(RED, 2);
+		normal_board(board, player1, player2);
 	}
 	else{
-		cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
-		cout << "'RED' or 'BLACK' starting first?. "; 
-		cin >> input_color;
-		board.cust(input_color, 1);
-		if (input_color == "BLACK"){
-			new_input_color = "RED";
-			board.cust(new_input_color, 2);
-		}
-		else{
-			new_input_color = "BLACK";
-			board.cust(new_input_color, 2);
-		}
+		customize_board(board, player1, player2); 
 	}
 	board.print_board(); 
 
 	//HERE!! ADD: 
-	//end game
+	//ADD ENDGAME OPTIONS AFTER EACH PRINTBOARD
 	//1. request draw 
 	//2. restart (shows score)
 	//3. quit (shows score)
