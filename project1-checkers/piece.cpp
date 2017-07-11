@@ -2,11 +2,13 @@
 #include "piece.hpp"
 
 
-Piece::Piece(string color, int num){
+Piece::Piece(string color, int num, int row, int col){
 	this->num = num; 
 	this->color = color; 
 	isKing = false;
 	val = 1.0f; 
+	this->row = row; 
+	this->col = col; 
 }
 
 void Piece::make_king(){
@@ -14,10 +16,10 @@ void Piece::make_king(){
 	val = 1.8f; 
 }
 
-void Piece::set_val(int x, int y){ 
-	this->x = x; 
-	this->y = y; 
+void Piece::set_position(int row, int col){ 
+	this->row = row; 
+	this->col = col; 
 }
 
-int Piece::get_x(){ return x; }
-int Piece::get_y(){ return y; }
+int Piece::get_row(){ return row; }
+int Piece::get_col(){ return col; }

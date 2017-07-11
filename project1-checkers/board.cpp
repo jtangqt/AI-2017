@@ -28,9 +28,9 @@ class Board{
 	 	int **init();
 };
 
-void Board::set_dimensions(int x, int y){
-	row = x;
-	col = y; 
+void Board::set_dimensions(int row, int col){
+	this -> row = row;
+	this -> col = col; 
 }
 
 int **Board::init(){
@@ -44,7 +44,7 @@ int **Board::init(){
 void Board::add_piece(){}//HERE!!
 void Board::delete_piece(){}//HERE!!
 
-int **Board::cust(string player_color, int player_num){
+int **Board::cust(string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
 	i = 0; 
 	string next, king; 
 	while(i ==0){
@@ -156,27 +156,24 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to out
 	z =arr[i][col-1];
 	k = 0;
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
-		if((y == x+1) && (y== x-1) &&(z == x+1) && (z == x-1)){
+		if(((y == x+1) || (y== x-1)) &&((z == x+1) || (z == x-1)){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl;
 			cout<< "Move piece #" <<c<<"  at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col+2<<endl;
-			Move eat_piece, eat_piece2;
-			eat_piece.set_val(row, col, j, col-2, k);
+			Move eat_piece(row, col, j, col-2, k);
 			k++;
-			eat_piece2.set_val(row, col, j, col+2, k);
+			Move eat_piece2(row, col, j, col+2, k);
 			k++;
 			move_pieces.push_back(move_pieces.end(), {eat_piece, eat_piece2});
 		}
 		else if((z == x+1) || (z == x-1)){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl; 
-			Move eat_piece;
-			eat_piece.set_val(row, col, j, col-2, k);
+			Move eat_piece(row, col, j, col-2, k);
 			move_pieces.push_back(eat_piece);
 			k++;
 		}
 		else{
 			cout<< "Move piece #"<<c<< " at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col+2<<endl; 
-			Move eat_piece;
-			eat_piece.set_val(row, col, j, col+2, k);
+			Move eat_piece(row, col, j, col+2, k);
 			move_pieces.push_back(eat_piece);
 			k++;
 		}
@@ -185,24 +182,21 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){//HERE!! how to out
 		if((z == NULL) && (y== NULL)){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl;
 			cout<< "Move piece #" <<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col+1<<endl;
-			Move move_piece, move_piece2;
-			move_piece.set_val(row, col, j, col-1, k);
+			Move move_piece(row, col, j, col-1, k);
 			k++;
-			move_piece2.set_val(row, col, j, col+1, k);
+			Move move_piece2(row, col, j, col+1, k);
 			k++;			
 			move_pieces.push_back(move_pieces.end(), {move_piece, move_piece2});
 		}
 		else if(z == NULL){
 			cout<< "Move piece #"<<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl; 
-			Move move_piece;
-			move_piece.set_val(row, col, j, col-1, k);
+			Move move_piece(row, col, j, col-1, k);
 			k++;
 			move_pieces.push_back(move_piece);
 		}
 		else{
 			cout<< "Move piece #" <<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col+1<<endl; 
-			Move move_piece;
-			move_piece.set_val(row, col, j, col+1, k);
+			Move move_piece(row, col, j, col+1, k);
 			k++;
 			move_pieces.push_back(move_piece);
 		}
@@ -226,8 +220,8 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 	std::list<Move> move; 
 	std::list<Move> move_pieces; 
 	for(i = 0; i< pieces.size(); i++){
-		int x = pieces[i].get_x();
-		int y = pieces[i].get_y(); 
+		int row = pieces[i].get_row();
+		int col = pieces[i].get_col(); 
 		
 		if(pieces[i].isKing == true){
 			j =1;
@@ -236,7 +230,7 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 			j = 0; 
 		}
 
-		move_pieces = board.hyp_moves(x, y, player_num, j);//HERE!! what kind of function do i need to return a move object?
+		move_pieces = board.hyp_moves(row, col, player_num, j);//HERE!! what kind of function do i need to return a move object?
 		move.splice(move.end(), move_pieces); 
 		}
 	}
