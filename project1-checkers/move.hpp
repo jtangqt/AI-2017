@@ -6,6 +6,9 @@ class Move{
 	Move *next_move; 
 	public:
 		Move(int, int, int, int, int);
+		void clear_val();
+		void set_next();
+		Move *get_next();
 };
 
 #endif

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string> 
+#include <list>
 #include "colormod.h"
 #include "piece.hpp"
 #include "move.hpp"
@@ -23,10 +25,10 @@ class Board{
 	public: 
 		void set_dimensions(int, int); 
 		void print_board(); 
-		list <Piece> cust(string, int);
-		void norm();
+		std::list<Piece> cust(std::string, int);
+		std::list<Piece> norm(int);
 	 	void init();
-	 	list<Move> Board::hyp_moves(int, int, int, bool)
+	 	std::list<Move> hyp_moves(int, int, int, bool);
 };
 
 void Board::set_dimensions(int row, int col){
@@ -41,12 +43,12 @@ void Board::init(){
 	}
 }
 
-void Board::add_piece(){}//HERE!!
-void Board::delete_piece(){}//HERE!!
+//void Board::add_piece(){}//HERE!!
+//void Board::delete_piece(){}//HERE!!
 
-list <Piece> Board::cust(string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
+std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
 	i = 0; 
-	string next, king; 
+	std::string next, king; 
 	std::list <Piece> player_pieces;
 	while(i ==0){
 		int input_row, input_col; 
@@ -69,7 +71,7 @@ list <Piece> Board::cust(string player_color, int player_num){ //HERE!! I need t
 				else{
 					arr[input_row-1][input_col-1] = player_num;
 				}
-				player_pieces.push_back(piece)
+				player_pieces.push_back(piece);
 				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
 					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue. "; 
 				}
@@ -91,12 +93,12 @@ list <Piece> Board::cust(string player_color, int player_num){ //HERE!! I need t
 	}
 }
 
-list<Piece> Board::norm(int player_num){
+std::list<Piece> Board::norm(int player_num){
 	
 	//player 1 on the bottom (BLACK)
 	//player 2 on top (RED)
 	list<Piece> norm_pieces;
-	string color
+	std::string color;
 
 	if (player_num = 1){
 		k = 5;
@@ -104,6 +106,7 @@ list<Piece> Board::norm(int player_num){
 	}
 	else{
 		k = 0; 
+		color = "RED";
 	}
 
 	for(i = 0; i <row; i++){
@@ -115,6 +118,7 @@ list<Piece> Board::norm(int player_num){
 			}
 		}
 	}
+	return norm_pieces; 
 }
 
 void Board::print_board(){
@@ -145,18 +149,121 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
-list<Move> Board::hyp_moves(int row, int col, int c, bool d){
+/** Pass in list of pieces for a player **/
+list<Move> get_all_possible_moves(list<Piece> l_pieces, int a_board[][], int p_num){
+	list<Move> pos_moves = new list<Pieces>();
+
+	list<Piece>::iterator it;
+	for(it = l_pieces.begin(); it != l_pieces.end(); it++){
+		list<Move> pos_jumps = get_possible_jumps(a_board, it->get_col(), it->get_row(), it->is_king(), p_num);
+		if(pos_jumps.empty()){
+			// Cannot jump, can only make a single move
+			if((it->is_king() || p_num == 1) && a_board[y-1][x-1] == 0){
+				Move m = new Move(x, y, x-1, y-1, 0);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || p_num == 1) && a_board[y-1][x+1] == 0){
+				Move m = new Move(x, y, x+1, y-1, 0);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || p_num == 2) && a_board[y+1][x-1] == 0){
+				Move m = new Move(x, y, x-1, y+1, 0);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || p_num == 2) && a_board[y+1][x+1] == 0){
+				Move m = new Move(x, y, x+1, y+1, 0);
+				pos_moves.push_back(m);
+			}
+		}else{
+			pos_moves.merge(pos_jumps);
+		}
+	}
+}
+
+list<Move> get_possible_jumps(int a_board[][], int x, int y, bool is_king, int p_num){
+	list<Move> pos_jumps = new list<Move>();
+	int temp_board[8][8];
+	list<Move>::iterator it;
+
+	if((it->is_king() || p_num == 1) && a_board[y-1][x-1] % 2 == 0){ // If player 2 piece is there (even)
+		if(a_board[y-2][x-2] == 0){	// Can jump
+			copy(a_board, a_board+8*8, temp_board); // Copy board
+			temp_board[y-2][x-2] = temp_board[y][x]; // Update board
+			temp_board[y][x] = 0;
+			temp_board[y-1][x-1] = 0;
+		
+			/** Recursion **/
+			list<Move> sub_jumps = get_possible_jumps(temp_board, x-2, y-2, is_king, p_num);
+			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+				Move j = new Move(x, y, x-2, y-2, 0);
+				j.set_next(it)
+				pos_jumps.push_back(j);
+			}
+		}
+	}
+	if((it->is_king() || p_num == 1) && a_board[y-1][x+1] % 2 == 0){ // If player 2 piece is there (even)
+		if(a_board[y-2][x+2] == 0){	// Can jump
+			copy(a_board, a_board+8*8, temp_board); // Copy board
+			temp_board[y-2][x+2] = temp_board[y][x]; // Update board
+			temp_board[y][x] = 0;
+			temp_board[y-1][x+1] = 0;
+		
+			/** Recursion **/
+			list<Move> sub_jumps = get_possible_jumps(temp_board, x+2, y-2, is_king, p_num);
+			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+				Move j = new Move(x, y, x+2, y-2, 0);
+				j.set_next(it)
+				pos_jumps.push_back(j);
+			}
+		}
+	}
+	if((it->is_king() || p_num == 2) && (a_board[y+1][x-1] % 2 == 0)){ // If king and player 2 piece is there (even)
+		if(a_board[y+2][x-2] == 0){	// Can jump
+			copy(a_board, a_board+8*8, temp_board); // Copy board
+			temp_board[y+2][x-2] = temp_board[y][x]; // Update board
+			temp_board[y][x] = 0;
+			temp_board[y+1][x-1] = 0;
+		
+			/** Recursion **/
+			list<Move> sub_jumps = get_possible_jumps(temp_board, x-2, y+2, is_king, p_num);
+			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+				Move j = new Move(x, y, x-2, y+2, 0);
+					j.set_next(it)
+				pos_jumps.push_back(j);
+			}
+		}
+	}
+	if((it->is_king() || p_num == 2) && (a_board[y+1][x+1] % 2 == 0)){ // If king and player 2 piece is there (even)
+		if(a_board[y+2][x+2] == 0){	// Can jump
+			copy(a_board, a_board+8*8, temp_board); // Copy board
+			temp_board[y+2][x+2] = temp_board[y][x]; // Update board
+			temp_board[y][x] = 0;
+			temp_board[y+1][x+1] = 0;
+		
+			/** Recursion **/
+			list<Move> sub_jumps = get_possible_jumps(temp_board, x+2, y+2, is_king, p_num);
+			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+				Move j = new Move(x, y, x+2, y+2, 0);
+				j.set_next(it)
+				pos_jumps.push_back(j);
+			}
+		}
+	}
+	return pos_jumps;
+}
+
+std::list<Move> Board::hyp_moves(int row, int col, int c, bool d){
 	//no piece there (moves the piece)
 	//your piece there (doesn't print anything)
 	//other player piece there (eats the piece)
-	int x, y, z; 
+	int x, y, z, b; 
 
 	std::list<Move> move_pieces;
 
 	x=arr[row][col]; 
-	if(c = 1){
+	if(c == 1){
 		i = row-1; 
-		j = row -2; 
+		j = row-2; 
 		b = 2;
 	}
 	else{
@@ -166,17 +273,18 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){
 	}
 
 	y = arr[i][col+1];
-	z =arr[i][col-1];
-	k = 0;
+	z = arr[i][col-1];
+	k = 0; //if there is a piece that is of the opp color, it has to take that move
 	if((y == x+1) || (y== x-1) ||(z == x+1) || (z == x-1)){
-		if(((y == x+1) || (y== x-1)) &&((z == x+1) || (z == x-1)){
+		if(((y == x+1) || (y== x-1)) &&((z == x+1) || (z == x-1))){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl;
 			cout<< "Move piece #" <<c<<"  at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col+2<<endl;
 			Move eat_piece(row, col, j, col-2, k);
 			k++;
 			Move eat_piece2(row, col, j, col+2, k);
 			k++;
-			move_pieces.push_back(move_pieces.end(), {eat_piece, eat_piece2});
+			move_pieces.push_back(eat_piece);
+			move_pieces.push_back(eat_piece2);
 		}
 		else if((z == x+1) || (z == x-1)){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<j<<"and column "<<col-2<<endl; 
@@ -191,17 +299,18 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){
 			k++;
 		}
 	}
-	if(y == NULL|| z== NULL){ //when the box diagonal is empty
-		if((z == NULL) && (y== NULL)){
+	if(y == 0|| z== 0){ //when the box diagonal is empty
+		if((z == 0) && (y== 0)){
 			cout<< "Move piece #" <<c<<" at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl;
 			cout<< "Move piece #" <<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col+1<<endl;
 			Move move_piece(row, col, j, col-1, k);
 			k++;
 			Move move_piece2(row, col, j, col+1, k);
 			k++;			
-			move_pieces.push_back(move_pieces.end(), {move_piece, move_piece2});
+			move_pieces.push_back(move_piece);
+			move_pieces.push_back(move_piece2);
 		}
-		else if(z == NULL){
+		else if(z == 0){
 			cout<< "Move piece #"<<c<< " at row " << row <<"and column " << col << "to row "<<i<<"and column "<<col-1<<endl; 
 			Move move_piece(row, col, j, col-1, k);
 			k++;
@@ -217,32 +326,36 @@ list<Move> Board::hyp_moves(int row, int col, int c, bool d){
 
 	if(d = 1){
 		std::list<Move> move_king; 
-		move_king = (Board).hyp_moves(row, col, b, 0)
-		move_pieces.pushback(move_king);
+		move_king = this -> hyp_moves(row, col, b, 0);
+		move_pieces.push_back(move_king);
 	}
 	//HERE!! check for wall 
 	return move_pieces;
 }
 
-void Board::player_move(int a, int b){
-	int x, int y, int z; 
+// void Board::player_move(int a, int b){
+// 	int x, int y, int z; 
 
-	x=arr[a][b];
-	y = arr[a+1][b+1];
-	z =arr[a+1][b-1];
+// 	x=arr[a][b];
+// 	y = arr[a+1][b+1];
+// 	z =arr[a+1][b-1];
 	
-}
+// }
 
-int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
+int determine_move(int player_num, list<Piece> & pieces, Board board){ //HERE!!
 //for all of the pieces for one player, determine all of the moves it can make
 	int c; 
 	std::list<Move> move; 
 	std::list<Move> move_pieces; 
+
+	list<Piece>::iterator it = pieces.begin(); 
 	for(i = 0; i< pieces.size(); i++){
-		int row = pieces[i].get_row();
-		int col = pieces[i].get_col(); 
+		++it; 
+
+		int row = (*it).get_row();
+		int col = (*it).get_col(); 
 		
-		if(pieces[i].isKing == true){
+		if((*it).get_king() == true){
 			j =1;
 		}
 		else{
@@ -260,7 +373,7 @@ int determine_move(int player_num, list<Piece> & pieces){ //HERE!!
 int main(void){
 
 	char val;
-	string input_color, new_input_color;
+	std::string input_color, new_input_color;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
 	cin >> val;   
 
@@ -272,7 +385,8 @@ int main(void){
 	std::list<Piece> player2;
 
 	if(val == 'A'){
-		normal_board(board, player1, player2);
+		player1 = board.norm(1);
+		player2 = board.norm(2);
 	}
 	else{
 		cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
