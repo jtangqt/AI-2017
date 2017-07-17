@@ -122,6 +122,8 @@ list<Move> get_all_possible_moves(list<Piece> l_pieces, int a_board[8][8], int p
 
 void move_piece(list<Move> p_move, int **board){
 //recursive function for the piece
+	//list::pop_front
+	//create a temporary board and put it into move_piece and take the front of p_move as the move
 }
 
 void determine_move(list<Move> p_move, list<Piece> player_piece, int a_board){//HERE!! make up valid name for function
