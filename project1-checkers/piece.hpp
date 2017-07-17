@@ -15,6 +15,8 @@ class Piece{
 		int row, col; //
 		bool isKing; // whether king or not
 		float val; // for AI stuff
+		int num;
+		std::string color; 
 };
 
 #endif

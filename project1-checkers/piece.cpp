@@ -18,4 +18,4 @@ void Piece::make_king(){
 
 int Piece::get_row(){ return row; }
 int Piece::get_col(){ return col; }
-bool Piece::get_king(){ return isKing; }
+bool Piece::is_king(){ return isKing; }
