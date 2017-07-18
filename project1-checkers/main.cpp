@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string> 
 #include <list>
-#include "colormod.h"
 #include "piece.hpp"
 #include "move.hpp"
 #include "board.hpp"
@@ -9,9 +8,6 @@
 
 using namespace std;
 
-Color::Modifier m_red(Color::FG_RED);
-Color::Modifier m_green(Color::FG_GREEN);
-Color::Modifier m_def(Color::FG_DEFAULT);
 int i, j, k; 
 
 
@@ -30,7 +26,7 @@ list<Move> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, int
 			/** Recursion **/
 			list<Move> sub_jumps = get_possible_jumps(temp_board, x-2, y-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move j = new Move(x, y, x-2, y-2);
+				Move j = new Move(x, y, x-2, y-2, 0);
 				j.set_next(it)
 				pos_jumps.push_back(j);
 			}
@@ -46,7 +42,7 @@ list<Move> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, int
 			/** Recursion **/
 			list<Move> sub_jumps = get_possible_jumps(temp_board, x+2, y-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move j = new Move(x, y, x+2, y-2);
+				Move j = new Move(x, y, x+2, y-2, 0);
 				j.set_next(it)
 				pos_jumps.push_back(j);
 			}
@@ -62,7 +58,7 @@ list<Move> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, int
 			/** Recursion **/
 			list<Move> sub_jumps = get_possible_jumps(temp_board, x-2, y+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move j = new Move(x, y, x-2, y+2);
+				Move j = new Move(x, y, x-2, y+2, 0);
 					j.set_next(it)
 				pos_jumps.push_back(j);
 			}
@@ -78,7 +74,7 @@ list<Move> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, int
 			/** Recursion **/
 			list<Move> sub_jumps = get_possible_jumps(temp_board, x+2, y+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move j = new Move(x, y, x+2, y+2);
+				Move j = new Move(x, y, x+2, y+2, 0);
 				j.set_next(it)
 				pos_jumps.push_back(j);
 			}
@@ -99,19 +95,19 @@ list<Move> get_all_possible_moves(list<Piece> l_pieces, int a_board[8][8], int p
 		if(pos_jumps.empty()){
 			// Cannot jump, can only make a single move
 			if((is_king==1 || p_num == 1) && a_board[y-1][x-1] == 0){
-				Move m = new Move(x, y, x-1, y-1);
+				Move m = new Move(x, y, x-1, y-1, 0);
 				pos_moves.push_back(m);
 			}
 			if((is_king==1 || p_num == 1) && a_board[y-1][x+1] == 0){
-				Move m = new Move(x, y, x+1, y-1);
+				Move m = new Move(x, y, x+1, y-1, 0);
 				pos_moves.push_back(m);
 			}
 			if((is_king==1 || p_num == 2) && a_board[y+1][x-1] == 0){
-				Move m = new Move(x, y, x-1, y+1);
+				Move m = new Move(x, y, x-1, y+1, 0);
 				pos_moves.push_back(m);
 			}
 			if((is_king==1 || p_num == 2) && a_board[y+1][x+1] == 0){
-				Move m = new Move(x, y, x+1, y+1);
+				Move m = new Move(x, y, x+1, y+1, 0);
 				pos_moves.push_back(m);
 			}
 		}else{

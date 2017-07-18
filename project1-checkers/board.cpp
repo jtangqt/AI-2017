@@ -1,17 +1,20 @@
 #include <iostream>
+#include "colormod.h"
 #include "board.hpp"
 
 //player 1 and player 2
 //player 1 - black unless starting in the middle of the game
 //player 2 - red
 
+Color::Modifier m_red(Color::FG_RED);
+Color::Modifier m_green(Color::FG_GREEN);
+Color::Modifier m_def(Color::FG_DEFAULT);
+
 
 void Board::set_dimensions(int row, int col){
 	this -> row = row;
 	this -> col = col; 
 }
-
-int **Board::share_board(){ return **arr; }
 
 void Board::init(){
 	arr = new int*[row];
@@ -127,3 +130,5 @@ void Board::print_board(){
 }
 
 void Board::update_board(int **arr){ this -> arr };
+
+int **Board::share_board(){ return **arr; }

@@ -2,16 +2,21 @@
 #include "move.hpp"
 
 
-Move::Move(int curr_row, int curr_col, int new_row, int new_col){ 
+Move::Move(int curr_row, int curr_col, int new_row, int new_col, int num){ 
 	this -> curr_row;
 	this -> curr_col;
 	this -> new_row;
 	this -> new_col;
+	this -> num = num; 
 	this->next_move = NULL;
 }
 
 void Move::clear_val(){
-	curr_row = curr_col = new_row = new_col =  0;
+	curr_row = curr_col = new_row = new_col = num=  0;
+}
+
+void Move::set_next(list<Move>::iterator next_move){//HERE!!
+	this -> next_move = next_move;
 }
 
 int Move::get_curr_row(){ return curr_row; }

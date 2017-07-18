@@ -1,5 +1,5 @@
-#ifndef MOVE_HPP_
-#define MOVE_HPP_
+#ifndef BOARD_HPP_
+#define BOARD_HPP_
 
 class Board{
 	private:
