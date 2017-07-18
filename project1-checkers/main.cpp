@@ -116,17 +116,31 @@ list<Move> get_all_possible_moves(list<Piece> l_pieces, int a_board[8][8], int p
 	}
 }
 
-void make_up_name(list<Move> p_move, list<Piece> player_piece, int a_board){//HERE!! make up valid name for function
+void move_piece(list<Move> p_move, int **board){
+//recursive function for the piece
+	//list::pop_front
+	//create a temporary board and put it into move_piece and take the front of p_move as the move
+}
+
+void determine_move(list<Move> p_move, list<Piece> player_piece, int a_board){//HERE!! make up valid name for function
 	//the user chooses what to move
 	//updates in move, piece and board
 	cout<<"Which piece would you like to move?"<<endl; 
+	int move_to_make; 
 	list<Move>::iterator it; 
-	for(it = p_move.begin(); it != p_move.end(); it++){
+	for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
 		//print the move
 		//need to indicate if it is a move after a move; how to display sub moves? 
 	}
 	cin >> move_to_make; 
 
+	auto p_move_front = p_move.begin(); 
+
+	std::advance(p_move_front, move_to_make)
+
+	for (it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+
+	}
 	//here, this will move the piece: update player_piece and a_board
 
 }
