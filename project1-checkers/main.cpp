@@ -12,7 +12,7 @@ using namespace std;
 int i, j, k; 
 
 
-list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, int p_num){
+list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p_num){
 	list<Move *> pos_jumps;
 	int temp_board[8][8];
 	list<Move *>::iterator it;
@@ -25,7 +25,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 			temp_board[y-1][x-1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps(temp_board, x-2, y-2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x-2, y-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(x, y, x-2, y-2, 0);
 				j->set_next(*it);
@@ -41,7 +41,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 			temp_board[y-1][x+1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps(temp_board, x+2, y-2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x+2, y-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(x, y, x+2, y-2, 0);
 				j->set_next(*it);
@@ -57,7 +57,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 			temp_board[y+1][x-1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps(temp_board, x-2, y+2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x-2, y+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(x, y, x-2, y+2, 0);
 				j->set_next(*it);
@@ -73,7 +73,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 			temp_board[y+1][x+1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps(temp_board, x+2, y+2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x+2, y+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(x, y, x+2, y+2, 0);
 				j->set_next(*it);
@@ -85,7 +85,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 }
 
 /** Pass in list of pieces for a player **/
-list<Move*> get_all_possible_moves(list<Piece> l_pieces, int a_board[][8], int p_num){
+list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_num){
  	list<Move *> pos_moves;
  
  	list<Piece>::iterator it;
@@ -137,10 +137,10 @@ int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row
 
 
 	if(make_move->get_next() != NULL){
-		move_piece(player_num, make_move->get_next(), temp_board, next_row, next_col);
+		return move_piece(player_num, make_move->get_next(), (int **)temp_board, next_row, next_col);
 	}
 	else{
-		return temp_board;	
+		return (int**)temp_board;	
 	}
 }
 
@@ -155,7 +155,7 @@ void print_list(Move* move_from_list){
 
 }
 
-void determine_move(list<Piece> player_piece, int a_board[][8], int p_num){//HERE!! make up valid name for function
+void determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!! make up valid name for function
 	//the user chooses what to move
 	//updates in move, piece and board
 
