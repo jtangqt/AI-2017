@@ -1,6 +1,9 @@
 #include <iostream>
+#include <list>
 #include "colormod.h"
 #include "board.hpp"
+
+using namespace std;
 
 //player 1 and player 2
 //player 1 - black unless starting in the middle of the game
@@ -18,7 +21,7 @@ void Board::set_dimensions(int row, int col){
 
 void Board::init(){
 	arr = new int*[row];
-	for(i = 0; i < row; ++i){
+	for(int i = 0; i < row; ++i){
 		arr[i] = new int [col];
 	}
 }
@@ -26,14 +29,14 @@ void Board::init(){
 //void Board::add_piece(){}//HERE!!
 //void Board::delete_piece(){}//HERE!!
 
-std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
-	i = 0; 
+typename std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
+	int i = 0; 
 	std::string next, king; 
 	std::list <Piece> player_pieces;
 	while(i ==0){
 		int input_row, input_col; 
-		cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
-		cin >> input_row; 
+		std::cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
+		std::cin >> input_row; 
 		if (input_row == 0){
 			i++; //HERE!! what if they just want to quit and restart 
 		}
@@ -80,6 +83,7 @@ std::list<Piece> Board::norm(int player_num){
 	list<Piece> norm_pieces;
 	std::string color;
 
+	int k;
 	if (player_num = 1){
 		k = 5;
 		color = "BLACK";
@@ -89,8 +93,8 @@ std::list<Piece> Board::norm(int player_num){
 		color = "RED";
 	}
 
-	for(i = 0; i <row; i++){
-		for(j = 0; j< col; j++){
+	for(int i = 0; i <row; i++){
+		for(int j = 0; j< col; j++){
 			if ((k <= i <= k+2) && (i+j)%2 == 0){
 				arr[i][j] = player_num;
 				Piece normal_pieces(color, player_num, i, j);//HERE!!
@@ -104,8 +108,8 @@ std::list<Piece> Board::norm(int player_num){
 void Board::print_board(){
 
 	cout << "_________________" << endl;
-	for(i = 0; i < row; i++){
-		for(j = 0; j < col; j++){
+	for(int i = 0; i < row; i++){
+		for(int j = 0; j < col; j++){
 			cout << "|";
 			switch(arr[i][j]){
 				case 0:
@@ -129,6 +133,6 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
-void Board::update_board(int **arr){ this -> arr };
+void Board::update_board(int **arr){ this -> arr = arr; }
 
-int **Board::share_board(){ return **arr; }
+int **Board::share_board(){ return arr; }

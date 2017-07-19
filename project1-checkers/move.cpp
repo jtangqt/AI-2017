@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include "move.hpp"
 
 
@@ -15,7 +16,7 @@ void Move::clear_val(){
 	curr_row = curr_col = new_row = new_col = num=  0;
 }
 
-void Move::set_next(list<Move>::iterator next_move){//HERE!!
+void Move::set_next(Move *next_move){//HERE!!
 	this -> next_move = next_move;
 }
 
