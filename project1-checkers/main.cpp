@@ -117,10 +117,31 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int a_board[][8], int p
  	}
  }
 
-void move_piece(list<Move> p_move, int **board){
+int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row, int col){
 //recursive function for the piece
 	//list::pop_front
 	//create a temporary board and put it into move_piece and take the front of p_move as the move
+	int temp_board[8][8];
+
+	int next_row = make_move->get_next_row();
+	int next_col = make_move -> get_curr_row(); 
+
+	memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
+	temp_board[next_row][next_col] = temp_board[row][col]; // Update board
+	temp_board[row][col] = 0;
+
+	if((next_row - row)%2 == 0){//if they jumped over the piece
+		int val_row = next_row - row;
+		int val_col = next_col -col; 
+	}
+
+
+	if(make_move->get_next() != NULL){
+		move_piece(player_num, make_move->get_next(), temp_board, next_row, next_col);
+	}
+	else{
+		return temp_board;	
+	}
 }
 
 void print_list(Move* move_from_list){
@@ -140,24 +161,23 @@ void determine_move(list<Piece> player_piece, int a_board[][8], int p_num){//HER
 
 	list<Move *> p_move; 
 	p_move=get_all_possible_moves(player_piece, a_board, p_num);
+	int i = 1; 
 
 	cout<<"Which piece would you like to move?"<<endl; 
-	int move_to_make; 
+	Move *move_to_make; 
 	list<Move*>::iterator it; 
 	for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+		cout << i; 
+		i++; 
 		print_list(*it);		
 		//print the move
 		//need to indicate if it is a move after a move; how to display sub moves? 
 	}
-	// cin >> move_to_make; 
+	//HERE!! how to get the *move_to_make move object
 
-	// auto p_move_front = p_move.begin(); 
-
-	// std::advance(p_move_front, move_to_make);
-
-	// for (it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
-
-	// }
+	int row = move_to_make ->get_curr_row(); 
+	int col = move_to_make -> get_curr_col();
+	move_piece(player_piece, move_to_make, a_board, row, col);
 	//here, this will move the piece: update player_piece and a_board
 
 }
