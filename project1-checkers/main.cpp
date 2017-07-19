@@ -85,7 +85,7 @@ list<Move *> get_possible_jumps(int a_board[8][8], int x, int y, bool is_king, i
 }
 
 /** Pass in list of pieces for a player **/
-list<Move> get_all_possible_moves(list<Piece> l_pieces, int a_board[][8], int p_num){
+list<Move*> get_all_possible_moves(list<Piece> l_pieces, int a_board[][8], int p_num){
  	list<Move *> pos_moves;
  
  	list<Piece>::iterator it;
@@ -123,29 +123,43 @@ void move_piece(list<Move> p_move, int **board){
 	//create a temporary board and put it into move_piece and take the front of p_move as the move
 }
 
-void determine_move(list<Move *> p_move, list<Piece> player_piece, int a_board){//HERE!! make up valid name for function
+void print_list(Move* move_from_list){
+	cout << move_from_list->get_curr_row() << move_from_list->get_curr_col()<<endl; 
+	if(move_from_list->get_next() != NULL){
+		print_list(move_from_list->get_next()); 
+	}
+	else{
+		cout << move_from_list->get_next_row() << move_from_list-> get_next_row()<<endl;		
+	}
+
+}
+
+void determine_move(list<Piece> player_piece, int a_board[][8], int p_num){//HERE!! make up valid name for function
 	//the user chooses what to move
 	//updates in move, piece and board
-	/*
+
+	list<Move *> p_move; 
+	p_move=get_all_possible_moves(player_piece, a_board, p_num);
+
 	cout<<"Which piece would you like to move?"<<endl; 
 	int move_to_make; 
 	list<Move*>::iterator it; 
 	for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+		print_list(*it);		
 		//print the move
 		//need to indicate if it is a move after a move; how to display sub moves? 
-		//cout << it->get_curr_row() << it->get_curr_col()<<endl; 
 	}
-	cin >> move_to_make; 
+	// cin >> move_to_make; 
 
-	auto p_move_front = p_move.begin(); 
+	// auto p_move_front = p_move.begin(); 
 
-	std::advance(p_move_front, move_to_make);
+	// std::advance(p_move_front, move_to_make);
 
-	for (it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+	// for (it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
 
-	}
+	// }
 	//here, this will move the piece: update player_piece and a_board
-*/
+
 }
 
 
@@ -184,6 +198,8 @@ int main(void){
 		}
 	}
 	board.print_board(); 
+
+	determine_move(player1, board.share_board(), 1);
 
 	//1. write a function for which player moves
 	//function includes printing all moves for that player

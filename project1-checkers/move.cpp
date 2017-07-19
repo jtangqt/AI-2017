@@ -16,7 +16,7 @@ void Move::clear_val(){
 	curr_row = curr_col = new_row = new_col = num=  0;
 }
 
-void Move::set_next(Move *next_move){//HERE!!
+void Move::set_next(Move *next_move){
 	this -> next_move = next_move;
 }
 
@@ -24,3 +24,5 @@ int Move::get_curr_row(){ return curr_row; }
 int Move::get_curr_col(){ return curr_col; }
 int Move::get_next_row(){ return new_row; }
 int Move::get_next_col(){ return new_col; }
+
+Move *Move::get_next(){ return next_move; }
