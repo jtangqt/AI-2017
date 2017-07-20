@@ -133,6 +133,6 @@ void Board::print_board(){
 	cout << "-----------------" << endl;
 }
 
-void Board::update_board(int **arr){ this -> arr = arr; }
+void Board::update_board(int **updated_arr){ memcpy(arr, updated_arr, 8*8*sizeof(int)); }
 
 int **Board::share_board(){ return arr; }

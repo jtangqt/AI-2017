@@ -2,7 +2,7 @@
 #define BOARD_HPP_
 
 #include <list>
-
+#include <cstring>
 #include "piece.hpp"
 
 class Board{
