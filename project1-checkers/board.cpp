@@ -29,7 +29,7 @@ void Board::init(){
 //void Board::add_piece(){}//HERE!!
 //void Board::delete_piece(){}//HERE!!
 
-typename std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
+std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
 	int i = 0; 
 	std::string next, king; 
 	std::list <Piece> player_pieces;
@@ -84,18 +84,18 @@ std::list<Piece> Board::norm(int player_num){
 	std::string color;
 
 	int k;
-	if (player_num = 1){
+	if (player_num == 1){
 		k = 5;
 		color = "BLACK";
 	}
-	else{
+	if (player_num == 2){
 		k = 0; 
 		color = "RED";
 	}
 
 	for(int i = 0; i <row; i++){
 		for(int j = 0; j< col; j++){
-			if ((k <= i <= k+2) && (i+j)%2 == 0){
+			if ((k <= i) && (i <= k+2) && ((i+j)%2 == 0)){ 
 				arr[i][j] = player_num;
 				Piece normal_pieces(color, player_num, i, j);//HERE!!
 				norm_pieces.push_back(normal_pieces);
