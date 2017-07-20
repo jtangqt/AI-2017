@@ -186,9 +186,9 @@ int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!
 	}
 	//HERE!! how to get the *move_to_make move object
 
-	int row = move_to_make ->get_curr_row(); 
-	int col = move_to_make -> get_curr_col();
-	return move_piece(player_piece, move_to_make, a_board, row, col);
+	// int row = move_to_make ->get_curr_row(); 
+	// int col = move_to_make -> get_curr_col();
+	// return move_piece(player_piece, move_to_make, a_board, row, col);
 	//here, this will move the piece: update player_piece and a_board
 
 }
