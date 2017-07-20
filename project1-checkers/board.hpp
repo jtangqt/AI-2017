@@ -12,8 +12,8 @@ class Board{
 	public: 
 		void set_dimensions(int, int); 
 		void print_board(); 
-		typename std::list<Piece> cust(std::string, int);
-		typename std::list<Piece> norm(int);
+		std::list<Piece> cust(std::string, int);
+		std::list<Piece> norm(int);
 	 	void init();
 	 	int **share_board(); 
 	 	void update_board(int **); 
