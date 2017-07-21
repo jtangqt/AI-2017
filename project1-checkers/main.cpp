@@ -2,6 +2,7 @@
 #include <string> 
 #include <list>
 #include <cstring>
+#include <typeinfo>
 #include "piece.hpp"
 #include "move.hpp"
 #include "board.hpp"
@@ -9,18 +10,12 @@
 
 using namespace std;
 
-int i, j, k; 
-
-
 list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p_num){
 	list<Move *> pos_jumps;
 	int temp_board[8][8];
 	list<Move *>::iterator it;
 
-	cout<< x<<" "<<y << " "<<is_king << " "<< p_num<<endl;
-
-	if((is_king==1 || p_num == 1) && a_board[y-1][x-1] % 2 == p_num-1){ // If player 2 piece is there (even)
-		cout << "hi4"<<endl; 
+	if((is_king==1 || p_num == 1) && a_board[y-1][x-1] % 2 == p_num-1 && a_board[y-1][x-1]){ // If player 2 piece is there (even)
 		if(a_board[y-2][x-2] == 0){	// Can jump
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[y-2][x-2] = temp_board[y][x]; // Update board
@@ -36,8 +31,7 @@ list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p
 			}
 		}
 	}
-	if((is_king==1 || p_num == 1) && a_board[y-1][x+1] % 2 == p_num-1){ // If player 2 piece is there (even)
-		cout<<"hi5"<<endl;
+	if((is_king==1 || p_num == 1) && a_board[y-1][x+1] % 2 == p_num-1 && a_board[y-1][x+1]){ // If player 2 piece is there (even)
 		if(a_board[y-2][x+2] == 0){	// Can jump
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[y-2][x+2] = temp_board[y][x]; // Update board
@@ -53,8 +47,7 @@ list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[y+1][x-1] % 2 == p_num-1)){ // If king and player 2 piece is there (even)
-		cout<<"hi6"<<endl; 
+	if((is_king==1 || p_num == 2) && (a_board[y+1][x-1] % 2 == p_num-1) && a_board[y+1][x-1]){ // If king and player 2 piece is there (even)
 		if(a_board[y+2][x-2] == 0){	// Can jump
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[y+2][x-2] = temp_board[y][x]; // Update board
@@ -70,8 +63,7 @@ list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[y+1][x+1] % 2 == p_num-1)){ // If king and player 2 piece is there (even)
-		cout<<"hi7"<<endl;
+	if((is_king==1 || p_num == 2) && (a_board[y+1][x+1] % 2 == p_num-1) && a_board[y+1][x+1]){ // If king and player 2 piece is there (even)
 		if(a_board[y+2][x+2] == 0){	// Can jump
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[y+2][x+2] = temp_board[y][x]; // Update board
@@ -87,7 +79,6 @@ list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p
 			}
 		}
 	}
-	cout<<"hi8"<<endl;
 	return pos_jumps;
 }
 
@@ -98,30 +89,34 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
  	list<Piece>::iterator it;
  	
 	for(it = l_pieces.begin(); it != l_pieces.end(); it++){
+		cout << "(" << it->get_row()  << "," << it->get_col() << ")" << endl;
  		list<Move *> pos_jumps = get_possible_jumps(a_board, it->get_col(), it->get_row(), it->is_king(), p_num);
- 		cout <<"hello"<<endl; 
 		int x = it-> get_col();
  		int y = it -> get_row(); 
  		if(pos_jumps.empty()){
  			// Cannot jump, can only make a single move
- 			if((it->is_king() || p_num == 1) && a_board[y-1][x-1] == 0){
+ 			if((it->is_king() || p_num == 1) && a_board[y-1][x-1] == 0 && y-1>= 0 && x-1 >=0){
  				Move *m = new Move(x, y, x-1, y-1, 0);
  				pos_moves.push_back(m);
  			}
- 			if((it->is_king() || p_num == 1) && a_board[y-1][x+1] == 0){
+ 			if((it->is_king() || p_num == 1) && a_board[y-1][x+1] == 0 && y-1>= 0 && x+1 <=7){ 
  				Move *m = new Move(x, y, x+1, y-1, 0);
  				pos_moves.push_back(m);
  			}
- 			if((it->is_king() || p_num == 2) && a_board[y+1][x-1] == 0){
+ 			cout << it->is_king() << p_num<<y+1<<x-1<<endl; 
+ 			if((it->is_king() || p_num == 2) && a_board[y+1][x-1] == 0 && y+1<=7 && x-1 >=0){
  				Move *m = new Move(x, y, x-1, y+1, 0);
  				pos_moves.push_back(m);
+ 				cout <<"hi3"<<endl;
  			}
- 			if((it->is_king() || p_num == 2) && a_board[y+1][x+1] == 0){
+ 			cout << it->is_king() << p_num<<y+1<<x+1<<endl; 
+
+ 			if((it->is_king() || p_num == 2) && a_board[y+1][x+1] == 0 && y+1<=7 && x+1 <=7){
  				Move *m = new Move(x, y, x+1, y+1, 0);
  				pos_moves.push_back(m);
+ 				cout <<"hi4"<<endl;
  			}
  		}else{
- 			cout << "hi9"<<endl;
 			pos_moves.merge(pos_jumps);
  		}
  	}
@@ -129,13 +124,11 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
  }
 
 int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row, int col){
-//recursive function for the piece
-	//list::pop_front
-	//create a temporary board and put it into move_piece and take the front of p_move as the move
 	int temp_board[8][8];
 
 	int next_row = make_move->get_next_row();
 	int next_col = make_move -> get_curr_row(); 
+
 
 	memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 	temp_board[next_row][next_col] = temp_board[row][col]; // Update board
@@ -153,10 +146,11 @@ int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row
 	else{
 		return (int**)temp_board;	
 	}
+	cout<<".";
 }
 
 void print_list(Move* move_from_list){
-	cout << move_from_list->get_curr_row() << move_from_list->get_curr_col()<<endl; 
+	cout << move_from_list->get_curr_row() << "\t"<< move_from_list->get_curr_col()<<endl; 
 	if(move_from_list->get_next() != NULL){
 		print_list(move_from_list->get_next()); 
 	}
@@ -177,17 +171,17 @@ int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!
 	cout<<"Which piece would you like to move?"<<endl; 
 	Move *move_to_make; 
 	list<Move*>::iterator it; 
-	for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
-		cout << i; 
-		i++; 
-		print_list(*it);		
-		//print the move
-		//need to indicate if it is a move after a move; how to display sub moves? 
-	}
+	// for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+	// 	i++; 
+	// 	print_list(*it);		
+	// 	//print the move
+	// 	//need to indicate if it is a move after a move; how to display sub moves? 
+	// }
 	//HERE!! how to get the *move_to_make move object
 
 	// int row = move_to_make ->get_curr_row(); 
 	// int col = move_to_make -> get_curr_col();
+	cout<<"Moving . . ";
 	// return move_piece(player_piece, move_to_make, a_board, row, col);
 	//here, this will move the piece: update player_piece and a_board
 
