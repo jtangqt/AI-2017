@@ -98,10 +98,12 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
  			if((it->is_king() || p_num == 1) && a_board[y-1][x-1] == 0 && y-1>= 0 && x-1 >=0){
  				Move *m = new Move(x, y, x-1, y-1, 0);
  				pos_moves.push_back(m);
+ 				cout << "hi1"<<endl;
  			}
  			if((it->is_king() || p_num == 1) && a_board[y-1][x+1] == 0 && y-1>= 0 && x+1 <=7){ 
  				Move *m = new Move(x, y, x+1, y-1, 0);
  				pos_moves.push_back(m);
+ 				cout <<"hi2"<<endl; 
  			}
  			cout << it->is_king() << p_num<<y+1<<x-1<<endl; 
  			if((it->is_king() || p_num == 2) && a_board[y+1][x-1] == 0 && y+1<=7 && x-1 >=0){
@@ -110,7 +112,6 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
  				cout <<"hi3"<<endl;
  			}
  			cout << it->is_king() << p_num<<y+1<<x+1<<endl; 
-
  			if((it->is_king() || p_num == 2) && a_board[y+1][x+1] == 0 && y+1<=7 && x+1 <=7){
  				Move *m = new Move(x, y, x+1, y+1, 0);
  				pos_moves.push_back(m);
@@ -171,18 +172,20 @@ int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!
 	cout<<"Which piece would you like to move?"<<endl; 
 	Move *move_to_make; 
 	list<Move*>::iterator it; 
+
 	// for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
 	// 	i++; 
 	// 	print_list(*it);		
 	// 	//print the move
 	// 	//need to indicate if it is a move after a move; how to display sub moves? 
 	// }
-	//HERE!! how to get the *move_to_make move object
+	// //HERE!! how to get the *move_to_make move object
 
 	// int row = move_to_make ->get_curr_row(); 
 	// int col = move_to_make -> get_curr_col();
-	cout<<"Moving . . ";
+	// cout<<"Moving . . ";
 	// return move_piece(player_piece, move_to_make, a_board, row, col);
+
 	//here, this will move the piece: update player_piece and a_board
 
 }
