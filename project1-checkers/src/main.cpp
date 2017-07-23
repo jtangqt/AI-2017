@@ -10,70 +10,71 @@
 
 using namespace std;
 
-list<Move *> get_possible_jumps(int **a_board, int x, int y, bool is_king, int p_num){
+/*This function gets all the possible jumps*/
+list<Move *> get_possible_jumps(int **a_board, int row, int col, bool is_king, int p_num){
 	list<Move *> pos_jumps;
 	int temp_board[8][8];
 	list<Move *>::iterator it;
 
-	if((is_king==1 || p_num == 1) && a_board[y-1][x-1] % 2 == p_num-1 && a_board[y-1][x-1]){ // If player 2 piece is there (even)
-		if(a_board[y-2][x-2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
-			temp_board[y-2][x-2] = temp_board[y][x]; // Update board
-			temp_board[y][x] = 0;
-			temp_board[y-1][x-1] = 0;
+	if((is_king==1 || p_num == 1) && a_board[row-1][col-1] % 2 == p_num-1 && a_board[row-1][col-1]){ // If plarower 2 piece is there (even)
+		if(a_board[row-2][col-2] == 0){	// Can jump
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			temp_board[row-2][col-2] = temp_board[row][col]; // Update board
+			temp_board[row][col] = 0;
+			temp_board[row-1][col-1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x-2, y-2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col-2, row-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(x, y, x-2, y-2, 0);
+				Move *j = new Move(row, col, row-2, col-2, 0);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
 		}
 	}
-	if((is_king==1 || p_num == 1) && a_board[y-1][x+1] % 2 == p_num-1 && a_board[y-1][x+1]){ // If player 2 piece is there (even)
-		if(a_board[y-2][x+2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
-			temp_board[y-2][x+2] = temp_board[y][x]; // Update board
-			temp_board[y][x] = 0;
-			temp_board[y-1][x+1] = 0;
+	if((is_king==1 || p_num == 1) && a_board[row-1][col+1] % 2 == p_num-1 && a_board[row-1][col+1]){ // If plarower 2 piece is there (even)
+		if(a_board[row-2][col+2] == 0){	// Can jump
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			temp_board[row-2][col+2] = temp_board[row][col]; // Update board
+			temp_board[row][col] = 0;
+			temp_board[row-1][col+1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x+2, y-2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col+2, row-2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(x, y, x+2, y-2, 0);
+				Move *j = new Move(row, col, row+2, col-2, 0);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[y+1][x-1] % 2 == p_num-1) && a_board[y+1][x-1]){ // If king and player 2 piece is there (even)
-		if(a_board[y+2][x-2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
-			temp_board[y+2][x-2] = temp_board[y][x]; // Update board
-			temp_board[y][x] = 0;
-			temp_board[y+1][x-1] = 0;
+	if((is_king==1 || p_num == 2) && (a_board[row+1][col-1] % 2 == p_num-1) && a_board[row+1][col-1]){ // If king and plarower 2 piece is there (even)
+		if(a_board[row+2][col-2] == 0){	// Can jump
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			temp_board[row+2][col-2] = temp_board[row][col]; // Update board
+			temp_board[row][col] = 0;
+			temp_board[row+1][col-1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x-2, y+2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col-2, row+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(x, y, x-2, y+2, 0);
+				Move *j = new Move(row, col, row-2, col+2, 0);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[y+1][x+1] % 2 == p_num-1) && a_board[y+1][x+1]){ // If king and player 2 piece is there (even)
-		if(a_board[y+2][x+2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
-			temp_board[y+2][x+2] = temp_board[y][x]; // Update board
-			temp_board[y][x] = 0;
-			temp_board[y+1][x+1] = 0;
+	if((is_king==1 || p_num == 2) && (a_board[row+1][col+1] % 2 == p_num-1) && a_board[row+1][col+1]){ // If king and plarower 2 piece is there (even)
+		if(a_board[row+2][col+2] == 0){	// Can jump
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			temp_board[row+2][col+2] = temp_board[row][col]; // Update board
+			temp_board[row][col] = 0;
+			temp_board[row+1][col+1] = 0;
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, x+2, y+2, is_king, p_num);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col+2, row+2, is_king, p_num);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(x, y, x+2, y+2, 0);
+				Move *j = new Move(row, col, row+2, col+2, 0);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
@@ -89,40 +90,79 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
  	list<Piece>::iterator it;
  	
 	for(it = l_pieces.begin(); it != l_pieces.end(); it++){
-		cout << "(" << it->get_row()  << "," << it->get_col() << ")" << endl;
- 		list<Move *> pos_jumps = get_possible_jumps(a_board, it->get_col(), it->get_row(), it->is_king(), p_num);
-		int x = it-> get_col();
- 		int y = it -> get_row(); 
+		//cout << "(" << it->get_row()  << "," << it->get_col() << ")" << endl;
+		int col = it-> get_col();
+ 		int row = it -> get_row(); 
+ 		list<Move *> pos_jumps = get_possible_jumps(a_board, row, col, it->is_king(), p_num);
  		if(pos_jumps.empty()){
  			// Cannot jump, can only make a single move
- 			if((it->is_king() || p_num == 1) && a_board[y-1][x-1] == 0 && y-1>= 0 && x-1 >=0){
- 				Move *m = new Move(x, y, x-1, y-1, 0);
+ 			if((it->is_king() || p_num == 1) && a_board[row-1][col-1] == 0 && row-1>= 0 && col-1 >=0){
+ 				Move *m = new Move(row, col, row-1, col-1, 0);
  				pos_moves.push_back(m);
  				cout << "hi1"<<endl;
  			}
- 			if((it->is_king() || p_num == 1) && a_board[y-1][x+1] == 0 && y-1>= 0 && x+1 <=7){ 
- 				Move *m = new Move(x, y, x+1, y-1, 0);
+ 			if((it->is_king() || p_num == 1) && a_board[row-1][col+1] == 0 && row-1>= 0 && col+1 <=7){ 
+ 				Move *m = new Move(row, col, row-1, col+1, 0);
  				pos_moves.push_back(m);
  				cout <<"hi2"<<endl; 
  			}
- 			cout << it->is_king() << p_num<<y+1<<x-1<<endl; 
- 			if((it->is_king() || p_num == 2) && a_board[y+1][x-1] == 0 && y+1<=7 && x-1 >=0){
- 				Move *m = new Move(x, y, x-1, y+1, 0);
- 				pos_moves.push_back(m);
- 				cout <<"hi3"<<endl;
- 			}
- 			cout << it->is_king() << p_num<<y+1<<x+1<<endl; 
- 			if((it->is_king() || p_num == 2) && a_board[y+1][x+1] == 0 && y+1<=7 && x+1 <=7){
- 				Move *m = new Move(x, y, x+1, y+1, 0);
- 				pos_moves.push_back(m);
- 				cout <<"hi4"<<endl;
- 			}
+ 			// if((it->is_king() || p_num == 2) && a_board[row+1][col-1] == 0 && row+1<=7 && col-1 >=0){
+ 			// 	Move *m = new Move(row, col, row-1, col+1, 0);
+ 			// 	pos_moves.push_back(m);
+ 			// 	cout <<"hi3"<<endl;
+ 			// }
+ 			// if((it->is_king() || p_num == 2) && a_board[row+1][col+1] == 0 && row+1<=7 && col+1 <=7){
+ 			// 	Move *m = new Move(row, col, row+1, col+1, 0);
+ 			// 	pos_moves.push_back(m);
+ 			// 	cout <<"hi4"<<endl;
+ 			// }
  		}else{
 			pos_moves.merge(pos_jumps);
  		}
  	}
 	return pos_moves; 
  }
+
+void print_list(Move* move_from_list, int i){
+
+	Move *current = move_from_list;
+	while(current != NULL){
+		cout << "Move piece " <<i<< " from ";
+		cout << "(" <<current ->get_curr_row()<<", "<<current->get_curr_col()<< ")"<< " to "; 
+		cout <<"("<<current ->get_next_row()<<", "<<current->get_next_col()<<")"<<endl; 
+		current = current ->get_next(); 
+	}
+
+}
+
+int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!! make up valid name for function
+	//the user chooses what to move
+	//updates in move, piece and board
+
+	list<Move *> p_move; 
+	p_move=get_all_possible_moves(player_piece, a_board, p_num);
+	int i = 1;
+	int val;  
+
+	cout<<"Which piece would you like to move?"<<endl; 
+	Move *move_to_make; 
+	list<Move*>::iterator it; 
+
+	for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
+		print_list(*it, i);
+		i++; 
+	}
+	//HERE!! how to get the *move_to_make move object
+	cin>> val; 
+
+	// int row = move_to_make ->get_curr_row(); 
+	// int col = move_to_make -> get_curr_col();
+	// cout<<"Moving . . ";
+	//return move_piece(player_piece, move_to_make, a_board, row, col);
+
+	//here, this will move the piece: update player_piece and a_board
+
+}
 
 int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row, int col){
 	int temp_board[8][8];
@@ -148,46 +188,6 @@ int **move_piece(list<Piece> player_num, Move *make_move, int **a_board, int row
 		return (int**)temp_board;	
 	}
 	cout<<".";
-}
-
-void print_list(Move* move_from_list){
-	cout << move_from_list->get_curr_row() << "\t"<< move_from_list->get_curr_col()<<endl; 
-	if(move_from_list->get_next() != NULL){
-		print_list(move_from_list->get_next()); 
-	}
-	else{
-		cout << move_from_list->get_next_row() << move_from_list-> get_next_row()<<endl;		
-	}
-
-}
-
-int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!! make up valid name for function
-	//the user chooses what to move
-	//updates in move, piece and board
-
-	list<Move *> p_move; 
-	p_move=get_all_possible_moves(player_piece, a_board, p_num);
-	int i = 1; 
-
-	cout<<"Which piece would you like to move?"<<endl; 
-	Move *move_to_make; 
-	list<Move*>::iterator it; 
-
-	// for(it = p_move.begin(); it != p_move.end(); it++){//HERE!! may change the structure of "move" lists
-	// 	i++; 
-	// 	print_list(*it);		
-	// 	//print the move
-	// 	//need to indicate if it is a move after a move; how to display sub moves? 
-	// }
-	// //HERE!! how to get the *move_to_make move object
-
-	// int row = move_to_make ->get_curr_row(); 
-	// int col = move_to_make -> get_curr_col();
-	// cout<<"Moving . . ";
-	// return move_piece(player_piece, move_to_make, a_board, row, col);
-
-	//here, this will move the piece: update player_piece and a_board
-
 }
 
 
@@ -228,7 +228,7 @@ int main(void){
 	board.print_board(); 
 
 	board.update_board(determine_move(player1, board.share_board(), 1));
-	board.update_board(determine_move(player2, board.share_board(), 2)); 	
+	//board.update_board(determine_move(player2, board.share_board(), 2)); 	
 
 	//1. write a function for which player moves
 	//function includes printing all moves for that player

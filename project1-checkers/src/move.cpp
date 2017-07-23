@@ -4,10 +4,10 @@
 
 
 Move::Move(int curr_row, int curr_col, int new_row, int new_col, int num){ 
-	this -> curr_row;
-	this -> curr_col;
-	this -> new_row;
-	this -> new_col;
+	this -> curr_row = curr_row;
+	this -> curr_col =curr_col;
+	this -> new_row =new_row;
+	this -> new_col = new_col;
 	this -> num = num; 
 	this->next_move = NULL;
 }
