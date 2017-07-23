@@ -126,12 +126,14 @@ list<Move*> get_all_possible_moves(list<Piece> l_pieces, int **a_board, int p_nu
 void print_list(Move* move_from_list, int i){
 
 	Move *current = move_from_list;
+	cout <<i<< ": ";
+	cout << "(" << current->get_curr_row() << "," << current -> get_curr_col() << ")";
 	while(current != NULL){
-		cout << "Move piece " <<i<< " from ";
-		cout << "(" <<current ->get_curr_row()<<", "<<current->get_curr_col()<< ")"<< " to "; 
-		cout <<"("<<current ->get_next_row()<<", "<<current->get_next_col()<<")"<<endl; 
+		cout << "->";
+		cout << "(" << current->get_next_row() << "," << current -> get_next_col() << ")"; 
 		current = current ->get_next(); 
 	}
+	cout << endl;
 
 }
 
@@ -144,7 +146,7 @@ int **determine_move(list<Piece> player_piece, int **a_board, int p_num){//HERE!
 	int i = 1;
 	int val;  
 
-	cout<<"Which piece would you like to move?"<<endl; 
+	cout<<"Which move would you like to make?"<<endl; 
 	Move *move_to_make; 
 	list<Move*>::iterator it; 
 
