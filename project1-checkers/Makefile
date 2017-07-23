@@ -2,9 +2,11 @@ BINFILE = checkers.out
 CXX = g++
 CXXFLAGS = --std=c++11
 
+SOURCES = $(wildcard src/*.cpp)
+
 .PHONY: run clean
 
-$(BINFILE):
+$(BINFILE): $(SOURCES)
 	@echo Building $(BINFILE)...
 	@$(CXX) $(CXXFLAGS) -o $@ src/*.cpp -I includes
 

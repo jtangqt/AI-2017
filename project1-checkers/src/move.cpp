@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iterator>
-#include "move.hpp"
+#include <move.hpp>
 
 
 Move::Move(int curr_row, int curr_col, int new_row, int new_col, int num){ 

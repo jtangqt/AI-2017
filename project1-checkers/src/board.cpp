@@ -1,7 +1,7 @@
 #include <iostream>
 #include <list>
-#include "colormod.h"
-#include "board.hpp"
+#include <colormod.h>
+#include <board.hpp>
 
 using namespace std;
 

@@ -3,9 +3,9 @@
 #include <list>
 #include <cstring>
 #include <typeinfo>
-#include "piece.hpp"
-#include "move.hpp"
-#include "board.hpp"
+#include <piece.hpp>
+#include <move.hpp>
+#include <board.hpp>
 
 
 using namespace std;

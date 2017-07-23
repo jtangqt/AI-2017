@@ -1,5 +1,5 @@
 #include <iostream>
-#include "piece.hpp"
+#include <piece.hpp>
 
 
 Piece::Piece(std::string color, int num, int row, int col){
