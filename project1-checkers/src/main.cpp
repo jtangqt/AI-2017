@@ -16,9 +16,9 @@ list<Move *> get_possible_jumps(int **a_board, int row, int col, bool is_king, i
 	int temp_board[8][8];
 	list<Move *>::iterator it;
 
-	if((is_king==1 || p_num == 1) && a_board[row-1][col-1] % 2 == p_num-1 && a_board[row-1][col-1]){ // If plarower 2 piece is there (even)
+	if((is_king==1 || p_num == 1) && a_board[row-1][col-1] % 2 == p_num-1 && a_board[row-1][col-1]){ // If player 2 piece is there (even)
 		if(a_board[row-2][col-2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row-2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col-1] = 0;
@@ -32,9 +32,9 @@ list<Move *> get_possible_jumps(int **a_board, int row, int col, bool is_king, i
 			}
 		}
 	}
-	if((is_king==1 || p_num == 1) && a_board[row-1][col+1] % 2 == p_num-1 && a_board[row-1][col+1]){ // If plarower 2 piece is there (even)
+	if((is_king==1 || p_num == 1) && a_board[row-1][col+1] % 2 == p_num-1 && a_board[row-1][col+1]){ // If player 2 piece is there (even)
 		if(a_board[row-2][col+2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row-2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col+1] = 0;
@@ -48,9 +48,9 @@ list<Move *> get_possible_jumps(int **a_board, int row, int col, bool is_king, i
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[row+1][col-1] % 2 == p_num-1) && a_board[row+1][col-1]){ // If king and plarower 2 piece is there (even)
+	if((is_king==1 || p_num == 2) && (a_board[row+1][col-1] % 2 == p_num-1) && a_board[row+1][col-1]){ // If king and player 2 piece is there (even)
 		if(a_board[row+2][col-2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row+2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row+1][col-1] = 0;
@@ -64,9 +64,9 @@ list<Move *> get_possible_jumps(int **a_board, int row, int col, bool is_king, i
 			}
 		}
 	}
-	if((is_king==1 || p_num == 2) && (a_board[row+1][col+1] % 2 == p_num-1) && a_board[row+1][col+1]){ // If king and plarower 2 piece is there (even)
+	if((is_king==1 || p_num == 2) && (a_board[row+1][col+1] % 2 == p_num-1) && a_board[row+1][col+1]){ // If king and player 2 piece is there (even)
 		if(a_board[row+2][col+2] == 0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Coprow board
+			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row+2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row+1][col+1] = 0;
