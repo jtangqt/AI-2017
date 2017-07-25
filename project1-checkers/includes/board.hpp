@@ -5,8 +5,6 @@
 #include <cstring>
 #include "piece.hpp"
 
-using namespace std; 
-
 class Board{
 	private:
 		int **arr;

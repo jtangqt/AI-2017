@@ -1,6 +1,8 @@
 #ifndef MOVE_HPP_
 #define MOVE_HPP_
 
+using namespace std; 
+
 class Move{
 	int curr_row, curr_col, next_row, next_col;
 	Move *next_move; 

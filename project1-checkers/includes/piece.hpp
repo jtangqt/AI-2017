@@ -5,6 +5,7 @@
 #include "move.hpp"
 #include "deleted.hpp"
 
+
 class Piece{
 	//stores their positions 
 	public: 

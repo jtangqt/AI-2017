@@ -20,5 +20,16 @@ int Piece::get_col(){ return col; }
 int Piece::get_player_num(){ return player_num; }
 bool Piece::is_king(){ return isKing; }
 
-void Piece::update_piece(Move *move_to_make){}
+void Piece::update_piece(Move *move_to_make){
+
+	Move *current = move_to_make;
+	cout << "(" << current->get_curr_row() << "," << current -> get_curr_col() << ")";
+	while(current != NULL){
+		cout << " -> (" << current->get_next_row() << "," << current -> get_next_col() << ")";
+		current = current ->get_next(); 
+	} 
+	cout << endl;
+
+}
+
 void Piece::delete_pieces(Deleted *to_delete){}

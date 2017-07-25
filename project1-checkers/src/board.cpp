@@ -9,10 +9,7 @@ Color::Modifier m_def(Color::FG_DEFAULT);
 Board::Board(int row, int col){  //sets dimension and initializes the board
 	this -> row = row;
 	this -> col = col; 
-	arr = (int **)malloc(row * sizeof(int *));
-	    for (int i=0; i<row; i++){
-	    	arr[i] = (int *)malloc(col * sizeof(int));
-	    }
+	arr = (int **)malloc(row * col * sizeof(int *));
 }
 
 void Board::print_board(){
@@ -54,6 +51,7 @@ std::list<Piece> Board::cust(std::string player_color, int player_num){
 		
 		if (input_row == 0){
 			i++; //HERE!! what if they just want to quit and restart 
+			cust_pieces.clear(); 
 		}
 		else if((0< input_row) && (input_row<= row)){ 
 			cout<< "Type col of "<< player_color << " from 0-7. ";
@@ -124,9 +122,11 @@ std::list<Piece> Board::norm(int player_num){
 }
 
 int **Board::share_board(){
-	//HERE!!
+	int **dest = (int**)malloc(row*col*sizeof(int));
+	memcpy(dest, arr, row*col*sizeof(int));
+	return dest; 
 }
 
 Deleted *Board::update_board(Move *move_to_make){
-	//HERE!!
+	//TODO
 }
