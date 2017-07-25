@@ -15,7 +15,7 @@ class Board{
 		std::list<Piece> cust(std::string, int);
 		std::list<Piece> norm(int);
 	 	int **share_board(); 
-	 	Deleted *update_board(Move *); 
+	 	std::list<Deleted> update_board(Move *); 
 };
 
 #endif	

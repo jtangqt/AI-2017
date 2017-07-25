@@ -141,18 +141,20 @@ std::list<Deleted> Board::update_board(Move *move_to_make){
 		new_row = current -> get_next_row();
 		new_col = current -> get_next_col(); 
 		
-		del_row = (new_row - curr_row)/2 + curr_row;
-		del_col = (new_col - curr_col)/2 + curr_col; 
+		if(new_row- curr_row ==2){
+			del_row = (new_row - curr_row)/2 + curr_row;
+			del_col = (new_col - curr_col)/2 + curr_col; 
 
-		arr[del_row][del_col] = 0;
+			arr[del_row][del_col] = 0;
 
-		Deleted new_delete(del_row, del_col);
-		to_delete.push_back(new_delete);
-
+			Deleted new_delete(del_row, del_col);
+			to_delete.push_back(new_delete);
+		}
 		current = current ->get_next();  
 	} 
 	
 	int p_val = arr[curr_row][curr_col];
+	cout<< p_val; 
 	arr[curr_row][curr_col] = 0; 
 	arr[new_row][new_col] = p_val; 
 	

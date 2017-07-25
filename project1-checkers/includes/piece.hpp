@@ -16,7 +16,7 @@ class Piece{
 		int get_player_num();
 		bool is_king();
 		void update_piece(Move *);
-		void delete_pieces(Deleted *);
+		void delete_piece();
 	private:
 		int row, col; //
 		bool isKing; // whether king or not

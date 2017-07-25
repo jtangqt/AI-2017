@@ -6,6 +6,8 @@ class Deleted{
 		int row, col;  
 	public: 
 		Deleted(int, int);
+		int get_row();
+		int get_col();
 };
 
 #endif		

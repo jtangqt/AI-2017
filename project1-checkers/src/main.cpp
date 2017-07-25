@@ -22,7 +22,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			cout<<"hi1";
 
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col-2, row-2, player_num, is_king);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col-2, player_num, is_king);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(row, col, row-2, col-2);
 				j->set_next(*it);
@@ -39,9 +39,9 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			cout<< "hi2";
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col+2, row-2, player_num, is_king);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col+2, player_num, is_king);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(row, col, row+2, col-2);
+				Move *j = new Move(row, col, row-2, col+2);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
@@ -56,9 +56,9 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			cout<<"hi3";
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col-2, row+2, player_num, is_king);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col-2, player_num, is_king);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
-				Move *j = new Move(row, col, row-2, col+2);
+				Move *j = new Move(row, col, row+2, col-2);
 				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
@@ -73,7 +73,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			cout <<"hi4";
 		
 			/** Recursion **/
-			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, col+2, row+2, player_num, is_king);
+			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col+2, player_num, is_king);
 			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
 				Move *j = new Move(row, col, row+2, col+2);
 				j->set_next(*it);
@@ -111,7 +111,7 @@ list<Move*> get_all_possible_moves(Board &object, list <Piece> y_turn){// HERE!!
  				pos_moves.push_back(m);
  			}
  			if((it->is_king() || player_num == 2) && (a_board[row+1][col-1] == 0) && row+1<=7 && col-1 >=0){
- 				Move *m = new Move(row, col, row-1, col+1);
+ 				Move *m = new Move(row, col, row+1, col-1);
  				pos_moves.push_back(m);
  			}
  			if((it->is_king() || player_num == 2) && (a_board[row+1][col+1] == 0) && row+1<=7 && col+1 <=7){
@@ -178,6 +178,7 @@ void move_piece(Board &object, list<Piece> y_turn, list<Piece> n_turn, Move *mov
 	list<Deleted> to_delete;
 	list<Piece>::iterator y_it;
 	list<Piece>::iterator n_it; 
+	list<Deleted>::iterator d_it; 
 	int curr_row, curr_col; 
 
 	to_delete = object.update_board(move_to_make);
@@ -196,7 +197,11 @@ void move_piece(Board &object, list<Piece> y_turn, list<Piece> n_turn, Move *mov
 		}
 	}
 	for(n_it = n_turn.begin(); n_it != n_turn.end(); n_it++){
-		n_it -> delete_pieces(to_delete); 	
+		for(d_it = to_delete.begin(); d_it != to_delete.end(); d_it++){
+			if((n_it -> get_row() == d_it -> get_row()) && (n_it -> get_col() == d_it -> get_col())){
+				n_it = n_turn.erase(n_it);
+			}
+		}	
 	}
 }
 
@@ -236,5 +241,10 @@ int main(){
 
 
 	determine_move(board, player2, player1);
-	determine_move(board, player1, player2);
+	board.print_board();
+
+	//TODO 
+	//loop through until someone wants to end the game
+
+
 }

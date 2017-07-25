@@ -36,13 +36,7 @@ void Piece::update_piece(Move *move_to_make){
 
 }
 
-void Piece::delete_pieces(std::list<Deleted> to_delete){
+void Piece::delete_piece(){
 	//TODO
-	list<Delete>::iterator it;
 
-	for(it = to_delete.begin(); it!= to_delete.end(); it++){
-		if(it -> get_row == row && it -> get_col == col){
-			
-		}	
-	}
 }
