@@ -176,20 +176,28 @@ void determine_move(Board &object, list<Piece> y_turn, list<Piece> n_turn){
 
 void move_piece(Board &object, list<Piece> y_turn, list<Piece> n_turn, Move *move_to_make){
 	list<Deleted> to_delete;
-	list<Piece>::iterator it;
+	list<Piece>::iterator y_it;
+	list<Piece>::iterator n_it; 
 	int curr_row, curr_col; 
 
-	//to_delete = object.update_board(move_to_make);
+	to_delete = object.update_board(move_to_make);
 
 	curr_row = move_to_make -> get_curr_row();
 	curr_col = move_to_make -> get_curr_col(); 
+
+	/* Testing print stuff */
+	//move_to_make = new Move(1,1, 3,3);
+	//move_to_make->set_next(new Move(3,3, 2,2));
+	//move_to_make->get_next()->set_next(new Move(2,2, 4,4));
 	
-	for(it = y_turn.begin(); it != y_turn.end(); it++){
-		if(it -> get_row() == curr_row && it -> get_col() == curr_col){
-			it -> update_piece(move_to_make);
+	for(y_it = y_turn.begin(); y_it != y_turn.end(); y_it++){
+		if(y_it -> get_row() == curr_row && y_it -> get_col() == curr_col){
+			y_it -> update_piece(move_to_make);
 		}
 	}
-	//n_turn.delete_pieces(to_delete); 
+	for(n_it = n_turn.begin(); n_it != n_turn.end(); n_it++){
+		n_it -> delete_pieces(to_delete); 	
+	}
 }
 
 int main(){

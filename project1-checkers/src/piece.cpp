@@ -24,12 +24,25 @@ void Piece::update_piece(Move *move_to_make){
 
 	Move *current = move_to_make;
 	cout << "(" << current->get_curr_row() << "," << current -> get_curr_col() << ")";
-	while(current != NULL){
+	cout << " -> (" <<current -> get_next_row() << "," << current -> get_next_col() << ")"; 
+	while(current -> get_next()){
+		current = current ->get_next();  
 		cout << " -> (" << current->get_next_row() << "," << current -> get_next_col() << ")";
-		current = current ->get_next(); 
 	} 
 	cout << endl;
+	
+	row = current -> get_next_row(); 
+	col = current -> get_next_col(); 
 
 }
 
-void Piece::delete_pieces(Deleted *to_delete){}
+void Piece::delete_pieces(std::list<Deleted> to_delete){
+	//TODO
+	list<Delete>::iterator it;
+
+	for(it = to_delete.begin(); it!= to_delete.end(); it++){
+		if(it -> get_row == row && it -> get_col == col){
+			
+		}	
+	}
+}
