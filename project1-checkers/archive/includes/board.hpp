@@ -5,19 +5,18 @@
 #include <cstring>
 #include "piece.hpp"
 
-using namespace std; 
-
 class Board{
 	private:
 		int **arr;
 		int row, col;  
 	public: 
-		Board(int, int); //sets dimension
+		void set_dimensions(int, int); 
 		void print_board(); 
 		std::list<Piece> cust(std::string, int);
 		std::list<Piece> norm(int);
+	 	void init();
 	 	int **share_board(); 
-	 	Deleted *update_board(Move *); 
+	 	void update_board(int **); 
 };
 
 #endif	

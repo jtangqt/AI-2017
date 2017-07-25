@@ -2,8 +2,6 @@
 #define PIECE_HPP_
 
 #include <string>
-#include "move.hpp"
-#include "deleted.hpp"
 
 class Piece{
 	//stores their positions 
@@ -12,15 +10,12 @@ class Piece{
 		void make_king();
 		int get_row();
 		int get_col();
-		int get_player_num();
 		bool is_king();
-		void update_piece(Move *);
-		void delete_pieces(Deleted *);
 	private:
 		int row, col; //
 		bool isKing; // whether king or not
 		float val; // for AI stuff
-		int player_num;
+		int num;
 		std::string color; 
 };
 

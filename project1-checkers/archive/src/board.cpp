@@ -1,86 +1,66 @@
 #include <iostream>
+#include <list>
+#include <colormod.h>
 #include <board.hpp>
-#include "colormod.h"
+
+using namespace std;
+
+//player 1 and player 2
+//player 1 - black unless starting in the middle of the game
+//player 2 - red
 
 Color::Modifier m_red(Color::FG_RED);
 Color::Modifier m_green(Color::FG_GREEN);
 Color::Modifier m_def(Color::FG_DEFAULT);
 
-Board::Board(int row, int col){  //sets dimension and initializes the board
+
+void Board::set_dimensions(int row, int col){
 	this -> row = row;
 	this -> col = col; 
+}
+
+void Board::init(){
 	arr = (int **)malloc(row * sizeof(int *));
 	    for (int i=0; i<row; i++){
 	    	arr[i] = (int *)malloc(col * sizeof(int));
 	    }
 }
 
-void Board::print_board(){
-	cout << "_________________" << endl;
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				cout << "|";
-				switch(arr[i][j]){
-					case 0:
-						cout << " ";
-						break;
-					case 1:
-						cout << m_red << "*" << m_def;
-						break;
-					case 2:
-						cout << m_green << "*" << m_def;
-						break;
-					case 3:
-						cout << m_red << "O" << m_def;
-						break;
-					case 4:
-						cout << m_green << "O" << m_def;
-				}
-			}
-			cout << "|" << endl;
-		}
-		cout << "-----------------" << endl;
-}
+//void Board::add_piece(){}//HERE!!
+//void Board::delete_piece(){}//HERE!!
 
-std::list<Piece> Board::cust(std::string player_color, int player_num){
+std::list <Piece> Board::cust(std::string player_color, int player_num){ //HERE!! I need to set x's and y's inside piece object
 	int i = 0; 
 	std::string next, king; 
-	std::list <Piece> cust_pieces;
-	
+	std::list <Piece> player_pieces;
 	while(i ==0){
 		int input_row, input_col; 
 		std::cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
 		std::cin >> input_row; 
-		
 		if (input_row == 0){
 			i++; //HERE!! what if they just want to quit and restart 
 		}
-		else if((0< input_row) && (input_row<= row)){ 
-			cout<< "Type col of "<< player_color << " from 0-7. ";
+		else if(0< input_row <= row){ //This is where they input the column
+			cout<< "Type col of "<< player_color << " from 1-8. ";
 			cin>> input_col; 
 			Piece piece(player_color, player_num, input_row, input_col); 
-
-			/* input col is > 0 and <= 7; input col + input row is divisible by 2; there is no other value in the spot */
-			if((0<input_col) && (input_col<= col) && (((input_col+input_row)%2) == 0 && arr[input_row][input_col] == 0)){
+			if((0<input_col) && (input_col<= col) && (((input_col+input_row)%2) == 0)){
 				cout << "Type 'Y' if that piece is a king and 'N' if not. ";
 				cin >> king; 
-				
 				if (king == "Y"){
-					arr[input_row][input_col] = player_num+2;
+					arr[input_row-1][input_col-1] = player_num+2;
 					piece.make_king();
 				}
 				else{
-					arr[input_row][input_col] = player_num;
+					arr[input_row-1][input_col-1] = player_num;
 				}
-				cust_pieces.push_back(piece);
-				
+				player_pieces.push_back(piece);
 				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
 					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue. "; 
 				}
 				else{
 					cout << "Are you done? 'Y' to start the game, 'N' to continue. " ;
 				}
-				
 				cin >> next; 
 				if (next == "Y"){
 					i ++; 
@@ -94,10 +74,13 @@ std::list<Piece> Board::cust(std::string player_color, int player_num){
 			cout<< "that's an invalid input, please try again. " <<endl; 
 		}
 	}
-	return cust_pieces; 
+	return player_pieces; 
 }
 
 std::list<Piece> Board::norm(int player_num){
+	
+	//player 1 on the bottom (BLACK)
+	//player 2 on top (RED)
 	list<Piece> norm_pieces;
 	std::string color;
 
@@ -123,10 +106,46 @@ std::list<Piece> Board::norm(int player_num){
 	return norm_pieces; 
 }
 
-int **Board::share_board(){
-	//HERE!!
+void Board::print_board(){
+
+	cout << "_________________" << endl;
+	for(int i = 0; i < row; i++){
+		for(int j = 0; j < col; j++){
+			cout << "|";
+			switch(arr[i][j]){
+				case 0:
+					cout << " ";
+					break;
+				case 1:
+					cout << m_red << "*" << m_def;
+					break;
+				case 2:
+					cout << m_green << "*" << m_def;
+					break;
+				case 3:
+					cout << m_red << "O" << m_def;
+					break;
+				case 4:
+					cout << m_green << "O" << m_def;
+			}
+		}
+		cout << "|" << endl;
+	}
+	cout << "-----------------" << endl;
 }
 
-Deleted *Board::update_board(Move *move_to_make){
-	//HERE!!
+void Board::update_board(int **updated_arr){ memcpy(arr, updated_arr, 8*8*sizeof(int)); }
+
+int **Board::share_board(){
+	int **dest; 
+
+	dest = (int**)malloc(row*col*sizeof(int));
+
+	for (int i = 0; i<row; i++){
+		dest[i] = (int*)malloc(col);
+
+		memcpy(dest[i], arr[i], col);
+	}
+
+	return dest; 
 }
