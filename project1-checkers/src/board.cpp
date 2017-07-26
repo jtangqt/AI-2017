@@ -105,11 +105,11 @@ std::list<Piece> Board::norm(int player_num){
 	int k;
 	if (player_num == 1){
 		k = 5;
-		color = "BLACK";
+		color = "RED";
 	}
 	if (player_num == 2){
 		k = 0; 
-		color = "RED";
+		color = "GREEN";
 	}
 
 	for(int i = 0; i <row; i++){

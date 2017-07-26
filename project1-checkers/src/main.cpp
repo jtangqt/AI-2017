@@ -251,7 +251,7 @@ int main(){
 	int k =0; 
 	Move *move_to_make;
 	std::string input_color, new_input_color;
-	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
+	cout << "Type 'A' for a new game or 'B' for a customizeable board. "; 
 	cin >> val;   
 
 	Board board(8, 8);	
@@ -260,23 +260,27 @@ int main(){
 	std::list<Piece> player2;
 
 	if(val == 'A'){
+		cout << "(0,0) is top-left corner; player 1 starts at the bottom of the board." <<endl; 
 		player1 = board.norm(1);
 		player2 = board.norm(2);
 	}
 	else{
-		cout<< "1. Board is up vs. down \n2. Black is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board"<<endl; 
-		cout << "'RED' or 'BLACK' starting first?. "; 
+		cout<< "1. Board is up vs. down \n2. Red is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board.\n"<<endl; 
+		cout << "'RED' or 'GREEN' starting first?. "; 
 		cin >> input_color;
 		
-		player1 = board.cust(input_color, 1);
-		
-		if (input_color == "BLACK"){
+		if (input_color == "GREEN"){
+			player1 = board.cust(input_color, 1);
 			new_input_color = "RED";
 			player2 = board.cust(new_input_color, 2);//HERE! create individual pieces in player
 		}
-		else{
-			new_input_color = "BLACK";
+		else if(input_color == "RED"){
+			player1 = board.cust(input_color, 1);
+			new_input_color = "GREEN";
 			player2 = board.cust(new_input_color, 2);
+		}
+		else{
+			cout<< "That's an invalid input. Please try again." <<endl; 	
 		}
 	}
 	board.print_board(); 
@@ -301,6 +305,4 @@ int main(){
 
 	//TODO 
 	//seg fault when jumping second time from a side space
-	//making a piece king (update in board and player piece)
-
 }
