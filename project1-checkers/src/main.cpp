@@ -13,6 +13,8 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 	int temp_board[8][8];
 	list<Move *>::iterator it;
 
+	cout << "(" << row<< ","<< col << ")"<<endl; 
+
 	if((is_king==1 || player_num == 1) && a_board[row-1][col-1] % 2 == player_num-1 && a_board[row-1][col-1] && row-1>=0 && col-1>=0){ // If player 2 piece is there (even)
 		if(a_board[row-2][col-2] == 0 && row-2>=0 && col-2>=0){	// Can jump
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
@@ -238,7 +240,7 @@ list<Piece> move_b_del_p(Board &object, list<Piece> n_turn, Move *move_to_make){
 				n_it = n_turn.erase(n_it);
 			}
 		}	
-	}
+	}	
 
 	return n_turn; 
 }
@@ -298,6 +300,7 @@ int main(){
 	}
 
 	//TODO 
-	//loop through until someone wants to end the game
+	//seg fault when jumping second time from a side space
+	//making a piece king (update in board and player piece)
 
 }
