@@ -19,7 +19,6 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			temp_board[row-2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col-1] = 0;
-			cout<< "hi";
 
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col-2, player_num, is_king);
@@ -41,8 +40,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row-2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
-			temp_board[row-1][col+1] = 0;
-			cout<< "hi1";
+			temp_board[row-1][col+1] = 0;;
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col+2, player_num, is_king);
@@ -64,8 +62,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row+2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
-			temp_board[row+1][col-1] = 0;
-			cout<< "hi2";
+			temp_board[row+1][col-1] = 0;;
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col-2, player_num, is_king);
@@ -87,8 +84,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
 			temp_board[row+2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
-			temp_board[row+1][col+1] = 0;
-			cout<< "hi4";
+			temp_board[row+1][col+1] = 0;;
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col+2, player_num, is_king);
@@ -127,7 +123,6 @@ list<Move*> get_all_possible_moves(Board &object, list <Piece> y_turn){// HERE!!
 	}
 
 	if(all_pos_jumps.empty()){
-		cout<< "hi5";
 		for(it = y_turn.begin(); it != y_turn.end(); it++){
 
 			row = it -> get_row(); 
@@ -170,7 +165,6 @@ void print_list(Move* move_from_list, int i){
 		cout << "(" << current->get_next_row() << "," << current -> get_next_col() << ")"; 
 		current = current ->get_next(); 
 	}
-	cout<< "hi6";
 	cout << endl;
 
 }
@@ -185,9 +179,7 @@ Move *determine_move(Board &object, list<Piece> y_turn){
 
 	p_move=get_all_possible_moves(object, y_turn);
 
-	cout<<"Which move would you like to make?"<<endl; 
-
-	cout<< "hi7";
+	cout<<"Which move would you like to make?"<<endl;;
 
 	for(it = p_move.begin(); it != p_move.end(); it++){
 		print_list(*it, i);
@@ -224,8 +216,6 @@ list<Piece> move_player_piece(list<Piece> y_turn, Move *move_to_make){
 		}
 	}
 
-	cout<< "hi8";
-
 	return y_turn; 
 }
 
@@ -236,8 +226,6 @@ list<Piece> move_b_del_p(Board &object, list<Piece> n_turn, Move *move_to_make){
 	list<Deleted>::iterator d_it; 
 
 	to_delete = object.update_board(move_to_make);
-
-	cout<< "hi9";
 
 	/* Testing print stuff */
 	//move_to_make = new Move(1,1, 3,3);
