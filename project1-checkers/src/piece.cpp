@@ -36,10 +36,10 @@ void Piece::update_piece(Move *move_to_make){
 	cout << endl;
 
 	if(player_num == 1 && new_row == 0){
-		make_king(); 
+		Piece::make_king(); 
 	}
 	if(player_num == 2 && new_row == 7){
-		make_king(); 	
+		Piece::make_king(); 	
 	}
 
 	row = new_row; 

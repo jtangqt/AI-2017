@@ -13,6 +13,7 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 	int temp_board[8][8];
 	list<Move *>::iterator it;
 
+	cout << is_king; 
 	cout << "(" << row<< ","<< col << ")"<<endl; 
 
 	if((is_king==1 || player_num == 1) && a_board[row-1][col-1] % 2 == player_num-1 && a_board[row-1][col-1] && row-1>=0 && col-1>=0){ // If player 2 piece is there (even)
@@ -201,8 +202,6 @@ Move *determine_move(Board &object, list<Piece> y_turn){
 	}
 
 	return (*move_to_make); 
-
-	p_move.clear(); 
 	
 }
 

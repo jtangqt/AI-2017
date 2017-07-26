@@ -49,20 +49,16 @@ std::list<Piece> Board::cust(std::string player_color, int player_num){
 	
 	while(i ==0){
 		int input_row, input_col; 
-		std::cout<<"Type row of " << player_color <<  " from 1-8 or 0 to quit. "; 
+		std::cout<<"Type row of " << player_color <<  " from 0-7. "; 
 		std::cin >> input_row; 
 		
-		if (input_row == 0){
-			i++; //HERE!! what if they just want to quit and restart 
-			cust_pieces.clear(); 
-		}
-		else if((0< input_row) && (input_row<= row)){ 
+		if((0<= input_row) && (input_row< row)){ 
 			cout<< "Type col of "<< player_color << " from 0-7. ";
 			cin>> input_col; 
 			Piece piece(player_color, player_num, input_row, input_col); 
 
 			/* input col is > 0 and <= 7; input col + input row is divisible by 2; there is no other value in the spot */
-			if((0<input_col) && (input_col<= col) && (((input_col+input_row)%2) == 0 && arr[input_row][input_col] == 0)){
+			if((0<=input_col) && (input_col< col) && (((input_col+input_row)%2) == 0 && arr[input_row][input_col] == 0)){
 				cout << "Type 'Y' if that piece is a king and 'N' if not. ";
 				cin >> king; 
 				
@@ -158,6 +154,11 @@ std::list<Deleted> Board::update_board(Move *move_to_make){
 	
 	int p_val = arr[beg_row][beg_col];
 	arr[beg_row][beg_col] = 0; 
+
+	if((p_val == 1 && new_row == 0) || (p_val == 2 && new_row == 7)){
+		p_val = p_val + 2;  
+	}
+
 	arr[new_row][new_col] = p_val; 
 	
 	return to_delete; 
