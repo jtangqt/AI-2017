@@ -19,14 +19,19 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 			temp_board[row-2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col-1] = 0;
-			cout<<"hi1";
 
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col-2, player_num, is_king);
-			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+			if(sub_jumps.empty()){
 				Move *j = new Move(row, col, row-2, col-2);
-				j->set_next(*it);
 				pos_jumps.push_back(j);
+			}
+			else{
+				for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+					Move *j = new Move(row, col, row-2, col-2);
+					j->set_next(*it);
+					pos_jumps.push_back(j);
+				}	
 			}
 		}
 	}
@@ -40,10 +45,16 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row-2, col+2, player_num, is_king);
-			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+			if(sub_jumps.empty()){
 				Move *j = new Move(row, col, row-2, col+2);
-				j->set_next(*it);
 				pos_jumps.push_back(j);
+			}
+			else{
+				for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+					Move *j = new Move(row, col, row-2, col+2);
+					j->set_next(*it);
+					pos_jumps.push_back(j);
+				}	
 			}
 		}
 	}
@@ -57,10 +68,16 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col-2, player_num, is_king);
-			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+			if(sub_jumps.empty()){
 				Move *j = new Move(row, col, row+2, col-2);
-				j->set_next(*it);
 				pos_jumps.push_back(j);
+			}
+			else{
+				for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+					Move *j = new Move(row, col, row+2, col-2);
+					j->set_next(*it);
+					pos_jumps.push_back(j);
+				}	
 			}
 		}
 	}
@@ -74,24 +91,28 @@ list<Move*> get_possible_jumps(int **a_board, int row, int col, int player_num, 
 		
 			/** Recursion **/
 			list<Move *> sub_jumps = get_possible_jumps((int**)temp_board, row+2, col+2, player_num, is_king);
-			for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+			if(sub_jumps.empty()){
 				Move *j = new Move(row, col, row+2, col+2);
-				j->set_next(*it);
 				pos_jumps.push_back(j);
 			}
+			else{
+				for(it = sub_jumps.begin(); it != sub_jumps.end(); it++){
+					Move *j = new Move(row, col, row+2, col+2);
+					j->set_next(*it);
+					pos_jumps.push_back(j);
+				}	
+			}
 		}
-	}
+	}	
 	return pos_jumps; 
 }
 
 list<Move*> get_all_possible_moves(Board &object, list <Piece> y_turn){// HERE!! it's not the object part; it should be sharing an array now
-	list<Move *> pos_moves;
-	list<Move *> pos_jumps; 
+	list<Move *> pos_moves, all_pos_jumps, pos_jumps; 
 	list<Piece>::iterator it; 
 	int row, col, player_num;
 	bool is_king;  
 	int **a_board = {object.share_board()}; 
-
 
 	for(it = y_turn.begin(); it != y_turn.end(); it++){
 
@@ -101,27 +122,37 @@ list<Move*> get_all_possible_moves(Board &object, list <Piece> y_turn){// HERE!!
 		is_king = it -> is_king(); 
 
 		pos_jumps = get_possible_jumps(a_board, row, col, player_num, is_king);
-		if(pos_jumps.empty()){
+		all_pos_jumps.merge(pos_jumps);
+	}
+
+	if(all_pos_jumps.empty()){
+		for(it = y_turn.begin(); it != y_turn.end(); it++){
+
+			row = it -> get_row(); 
+			col = it -> get_col();
+			player_num = it -> get_player_num(); 
+			is_king = it -> is_king(); 
+
 			if((it->is_king() || player_num == 1) && (a_board[row-1][col-1] == 0) && row-1>= 0 && col-1 >=0){
- 				Move *m = new Move(row, col, row-1, col-1);
- 				pos_moves.push_back(m);
- 			}
- 			if((it->is_king() || player_num == 1) && (a_board[row-1][col+1] == 0) && row-1>= 0 && col+1 <=7){ 
- 				Move *m = new Move(row, col, row-1, col+1);
- 				pos_moves.push_back(m);
- 			}
- 			if((it->is_king() || player_num == 2) && (a_board[row+1][col-1] == 0) && row+1<=7 && col-1 >=0){
- 				Move *m = new Move(row, col, row+1, col-1);
- 				pos_moves.push_back(m);
- 			}
- 			if((it->is_king() || player_num == 2) && (a_board[row+1][col+1] == 0) && row+1<=7 && col+1 <=7){
- 				Move *m = new Move(row, col, row+1, col+1);
- 				pos_moves.push_back(m);
- 			}
+				Move *m = new Move(row, col, row-1, col-1);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || player_num == 1) && (a_board[row-1][col+1] == 0) && row-1>= 0 && col+1 <=7){ 
+				Move *m = new Move(row, col, row-1, col+1);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || player_num == 2) && (a_board[row+1][col-1] == 0) && row+1<=7 && col-1 >=0){
+				Move *m = new Move(row, col, row+1, col-1);
+				pos_moves.push_back(m);
+			}
+			if((it->is_king() || player_num == 2) && (a_board[row+1][col+1] == 0) && row+1<=7 && col+1 <=7){
+				Move *m = new Move(row, col, row+1, col+1);
+				pos_moves.push_back(m);
+			}
 		}
-		else{
-			pos_moves.merge(pos_jumps);
-		}
+	}
+	else{
+		pos_moves.merge(all_pos_jumps);
 	}
 
 	return pos_moves; 
@@ -142,7 +173,7 @@ void print_list(Move* move_from_list, int i){
 }
 
 
-void determine_move(Board &object, list<Piece> y_turn, list<Piece> n_turn){
+Move *determine_move(Board &object, list<Piece> y_turn){
 
 	list<Move *> p_move; 
 	list<Move*>::iterator move_to_make; 
@@ -169,33 +200,39 @@ void determine_move(Board &object, list<Piece> y_turn, list<Piece> n_turn){
 			cout<<"Invalid input, please try again."<<endl;
 		}
 	}
-	
-	move_piece(object, y_turn, n_turn, *move_to_make);
 
+	return (*move_to_make); 
+	
 }
 
-void move_piece(Board &object, list<Piece> y_turn, list<Piece> n_turn, Move *move_to_make){
-	list<Deleted> to_delete;
+list<Piece> move_player_piece(list<Piece> y_turn, Move *move_to_make){
 	list<Piece>::iterator y_it;
+
+	int curr_row = move_to_make -> get_curr_row();
+	int curr_col = move_to_make -> get_curr_col(); 
+
+	for(y_it = y_turn.begin(); y_it != y_turn.end(); y_it++){
+		if(y_it -> get_row() == curr_row && y_it -> get_col() == curr_col){
+			y_it -> update_piece(move_to_make);
+		}
+	}
+
+	return y_turn; 
+}
+
+list<Piece> move_b_del_p(Board &object, list<Piece> n_turn, Move *move_to_make){
+	list<Deleted> to_delete;
+	
 	list<Piece>::iterator n_it; 
 	list<Deleted>::iterator d_it; 
-	int curr_row, curr_col; 
 
 	to_delete = object.update_board(move_to_make);
-
-	curr_row = move_to_make -> get_curr_row();
-	curr_col = move_to_make -> get_curr_col(); 
 
 	/* Testing print stuff */
 	//move_to_make = new Move(1,1, 3,3);
 	//move_to_make->set_next(new Move(3,3, 2,2));
 	//move_to_make->get_next()->set_next(new Move(2,2, 4,4));
 	
-	for(y_it = y_turn.begin(); y_it != y_turn.end(); y_it++){
-		if(y_it -> get_row() == curr_row && y_it -> get_col() == curr_col){
-			y_it -> update_piece(move_to_make);
-		}
-	}
 	for(n_it = n_turn.begin(); n_it != n_turn.end(); n_it++){
 		for(d_it = to_delete.begin(); d_it != to_delete.end(); d_it++){
 			if((n_it -> get_row() == d_it -> get_row()) && (n_it -> get_col() == d_it -> get_col())){
@@ -203,11 +240,15 @@ void move_piece(Board &object, list<Piece> y_turn, list<Piece> n_turn, Move *mov
 			}
 		}	
 	}
+
+	return n_turn; 
 }
 
 int main(){
 	
-	char val;
+	char val, end_val; 
+	int k =0; 
+	Move *move_to_make;
 	std::string input_color, new_input_color;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board"<<endl; 
 	cin >> val;   
@@ -239,12 +280,165 @@ int main(){
 	}
 	board.print_board(); 
 
+	// while (k == 0){
+	// 	move_to_make = determine_move(board, player1);
+	// 	player1 = move_player_piece(player1, move_to_make);
+	// 	player2 = move_b_del_p(board, player2, move_to_make);
+	// 	board.print_board();
 
-	determine_move(board, player2, player1);
-	board.print_board();
+	// 	move_to_make = determine_move(board, player2);
+	// 	player2 = move_player_piece(player2, move_to_make);
+	// 	player2 = move_b_del_p(board, player1, move_to_make);
+	// 	board.print_board();
 
+	// 	cout << "Would you like to end the game?"<<endl;
+	// 	cin >> end_val;
+	// 	if (end_val == 'Y'){
+	// 		k = 1; 
+	// 	}
+	// }
+
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+
+
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+
+
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		move_to_make = determine_move(board, player1);
+		player1 = move_player_piece(player1, move_to_make);
+		player2 = move_b_del_p(board, player2, move_to_make);
+		board.print_board();
+
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+		
 	//TODO 
 	//loop through until someone wants to end the game
-
 
 }

@@ -154,7 +154,6 @@ std::list<Deleted> Board::update_board(Move *move_to_make){
 	} 
 	
 	int p_val = arr[curr_row][curr_col];
-	cout<< p_val; 
 	arr[curr_row][curr_col] = 0; 
 	arr[new_row][new_col] = p_val; 
 	

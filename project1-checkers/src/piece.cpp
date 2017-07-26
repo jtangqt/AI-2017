@@ -23,20 +23,19 @@ bool Piece::is_king(){ return isKing; }
 void Piece::update_piece(Move *move_to_make){
 
 	Move *current = move_to_make;
+	int new_row, new_col;
 	cout << "(" << current->get_curr_row() << "," << current -> get_curr_col() << ")";
-	cout << " -> (" <<current -> get_next_row() << "," << current -> get_next_col() << ")"; 
-	while(current -> get_next()){
+	
+	while(current){
+		new_row = current -> get_next_row();
+		new_col = current -> get_next_col();
+
+		cout << " -> (" << new_row << "," << new_col << ")"; 
 		current = current ->get_next();  
-		cout << " -> (" << current->get_next_row() << "," << current -> get_next_col() << ")";
 	} 
 	cout << endl;
 	
-	row = current -> get_next_row(); 
-	col = current -> get_next_col(); 
-
-}
-
-void Piece::delete_piece(){
-	//TODO
+	row = new_row; 
+	col = new_col; 
 
 }
