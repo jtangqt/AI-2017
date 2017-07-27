@@ -263,6 +263,7 @@ int main(){
 		cout << "(0,0) is top-left corner; player 1 starts at the bottom of the board." <<endl; 
 		player1 = board.norm(1);
 		player2 = board.norm(2);
+		board.print_board(); 
 	}
 	else{
 		cout<< "1. Board is up vs. down \n2. Red is always on the bottom and always player 1.\n3. 1 - Player 1 (RED) \t 2 - Player 2 (GREEN) \t 3 - Player 1 King (RED) \t 4 - Player 2 King (GREEN)"<<endl; 
@@ -304,11 +305,11 @@ int main(){
 			}
 		}
 
+		board.print_board(); 
+
 		cout << "Player '1' or '2' starting first?. "; 
 		cin >> input_val;
 	}
-
-	board.print_board(); 
 		
 	if(input_val == 2){
 		move_to_make = determine_move(board, player2);
