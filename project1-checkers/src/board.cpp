@@ -78,41 +78,6 @@ int **Board::share_board(){
 	return dest; 
 }
 
-std::list<Deleted> Board::update_board(Move *move_to_make){
-	list<Deleted> to_delete; 
-	int del_row, del_col, curr_row, curr_col, new_row, new_col, beg_row, beg_col; 
-	Move *current = move_to_make;
-
-	beg_row = current -> get_curr_row();
-	beg_col = current -> get_curr_col(); 
-	
-	while(current){
-		curr_row = current -> get_curr_row();
-		curr_col = current -> get_curr_col();
-		new_row = current -> get_next_row();
-		new_col = current -> get_next_col(); 
-		
-		if(abs(new_row - curr_row) ==2){
-			del_row = (new_row - curr_row)/2 + curr_row;
-			del_col = (new_col - curr_col)/2 + curr_col; 
-
-			arr[del_row][del_col] = 0;
-
-			Deleted new_delete(del_row, del_col);
-			to_delete.push_back(new_delete);
-		}
-		current = current ->get_next();  
-	} 
-	
-	int p_val = arr[beg_row][beg_col];
-	arr[beg_row][beg_col] = 0; 
-
-	if((p_val == 1 && new_row == 0) || (p_val == 2 && new_row == 7)){
-		p_val = p_val + 2;  
-	}
-
-	arr[new_row][new_col] = p_val; 
-	
-	return to_delete; 
-	
+void Board::update_board(int **arr){
+	this -> arr = arr; 
 }
