@@ -42,56 +42,8 @@ void Board::print_board(){
 		cout << "-----------------" << endl;
 }
 
-std::list<Piece> Board::cust(std::string player_color, int player_num){
-	int i = 0; 
-	std::string next, king; 
-	std::list <Piece> cust_pieces;
-	
-	while(i ==0){
-		int input_row, input_col; 
-		std::cout<<"Type row of " << player_color <<  " from 0-7. "; 
-		std::cin >> input_row; 
-		
-		if((0<= input_row) && (input_row< row)){ 
-			cout<< "Type col of "<< player_color << " from 0-7. ";
-			cin>> input_col; 
-			Piece piece(player_color, player_num, input_row, input_col); 
-
-			/* input col is > 0 and <= 7; input col + input row is divisible by 2; there is no other value in the spot */
-			if((0<=input_col) && (input_col< col) && (((input_col+input_row)%2) == 0 && arr[input_row][input_col] == 0)){
-				cout << "Type 'Y' if that piece is a king and 'N' if not. ";
-				cin >> king; 
-				
-				if (king == "Y"){
-					arr[input_row][input_col] = player_num+2;
-					piece.make_king();
-				}
-				else{
-					arr[input_row][input_col] = player_num;
-				}
-				cust_pieces.push_back(piece);
-				
-				if(player_num == 1){ //if it is the first player to input, then we give the user the option to go to next player
-					cout<< "Are you done? 'Y' for next player's positions and 'N' to continue. "; 
-				}
-				else{
-					cout << "Are you done? 'Y' to start the game, 'N' to continue. " ;
-				}
-				
-				cin >> next; 
-				if (next == "Y"){
-					i ++; 
-				}
-			}
-			else{
-				cout<< "that's an invalid input, please try again. " <<endl; 
-			}
-		}
-		else{
-			cout<< "that's an invalid input, please try again. " <<endl; 
-		}
-	}
-	return cust_pieces; 
+void Board::cust(int player_val, int piece_row, int piece_col){
+	arr[piece_row][piece_col] = player_val; 
 }
 
 std::list<Piece> Board::norm(int player_num){

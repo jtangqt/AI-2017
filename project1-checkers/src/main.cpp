@@ -1,5 +1,7 @@
 #include <iostream>
 #include <list>
+#include <fstream>
+#include <vector>
 
 #include "board.hpp"
 
@@ -246,9 +248,9 @@ list<Piece> move_b_del_p(Board &object, list<Piece> n_turn, Move *move_to_make){
 int main(){
 	
 	char val, end_val; 
-	int k =0; 
+	int x = 0, input_val = 1; 
+	int time = 0; 
 	Move *move_to_make;
-	std::string input_color, new_input_color;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board. "; 
 	cin >> val;   
 
@@ -263,27 +265,59 @@ int main(){
 		player2 = board.norm(2);
 	}
 	else{
-		cout<< "1. Board is up vs. down \n2. Red is on the bottom and starts first unless you customize\n3. First player must always be on the bottom side of the board.\n"<<endl; 
-		cout << "'RED' or 'GREEN' starting first?. "; 
-		cin >> input_color;
-		
-		if (input_color == "GREEN"){
-			player1 = board.cust(input_color, 1);
-			new_input_color = "RED";
-			player2 = board.cust(new_input_color, 2);//HERE! create individual pieces in player
-		}
-		else if(input_color == "RED"){
-			player1 = board.cust(input_color, 1);
-			new_input_color = "GREEN";
-			player2 = board.cust(new_input_color, 2);
-		}
-		else{
-			cout<< "That's an invalid input. Please try again." <<endl; 	
-		}
-	}
-	board.print_board(); 
+		cout<< "1. Board is up vs. down \n2. Red is always on the bottom and always player 1.\n3. 1 - Player 1 (RED) \t 2 - Player 2 (GREEN) \t 3 - Player 1 King (RED) \t 4 - Player 2 King (GREEN)"<<endl; 
 
-	while (k == 0){
+		ifstream file;
+		file.open("../input.txt");
+
+		int p_val, value, k = 0; 
+		vector<int> temp_board; 
+
+		while (file >> value) {
+			temp_board.push_back(value);
+		}
+		
+		file.close(); 
+
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				p_val = temp_board[k++];
+				board.cust(p_val, i, j);
+				if(p_val == 1){
+					Piece piece("RED", p_val, i, j);
+					player1.push_back(piece);
+				}
+				else if(p_val == 2){
+					Piece piece("GREEN", p_val, i, j);
+					player2.push_back(piece);
+				}
+				else if(p_val == 3){
+					Piece piece("RED", p_val-2, i, j);
+					piece.make_king(); 
+					player1.push_back(piece);
+				}
+				else if(p_val == 4){
+					Piece piece("GREEN", p_val-2, i, j);
+					piece.make_king(); 
+					player2.push_back(piece);	
+				}
+			}
+		}
+
+		cout << "Player '1' or '2' starting first?. "; 
+		cin >> input_val;
+	}
+
+	board.print_board(); 
+		
+	if(input_val == 2){
+		move_to_make = determine_move(board, player2);
+		player2 = move_player_piece(player2, move_to_make);
+		player1 = move_b_del_p(board, player1, move_to_make);
+		board.print_board();
+	}
+
+	while (x == 0){
 		move_to_make = determine_move(board, player1);
 		player1 = move_player_piece(player1, move_to_make);
 		player2 = move_b_del_p(board, player2, move_to_make);
@@ -297,7 +331,7 @@ int main(){
 		cout << "Would you like to end the game?"<<endl;
 		cin >> end_val;
 		if (end_val == 'Y'){
-			k = 1; 
+			x = 1; 
 		}
 	}
 
