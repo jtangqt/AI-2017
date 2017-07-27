@@ -46,7 +46,9 @@ std::list<Piece> Board::cust(std::string player_color, int player_num){
 	int i = 0; 
 	std::string next, king; 
 	std::list <Piece> cust_pieces;
-	
+
+
+
 	while(i ==0){
 		int input_row, input_col; 
 		std::cout<<"Type row of " << player_color <<  " from 0-7. "; 
