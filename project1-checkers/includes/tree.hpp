@@ -10,17 +10,35 @@ class Tree{
 	private:
 		int **arr;
 		int row = 8, col = 8; 
- 		std::list<Tree> leaf;
+		Move *move_to_make;
+ 		std::list<Tree> branches;
  		std::list<Piece> player1;
  		std::list<Piece> player2;  
 	public: 
-		Tree(int**, std::list<Piece>, std::list<Piece>);
+		/*Constructor*/
+		Tree(int**, std::list<Piece>, std::list<Piece>, Move *);
+		
+		/* Gets all possible moves and jumps */
 		std::list<Move*> get_all_possible_moves(std::list <Piece>);
 		std::list<Move*> get_possible_jumps(int**, int, int, int, bool); 
-		std::list<Piece> move_player_piece(list<Piece>, Move *); //this makes a move by updating the piece and returning the list of players
-		std::list<Piece> move_b_del_p(list<Piece>, Move *); //this updates the board and returns list of pieces (deleted ones are deleted)
+		
+		/*Moves y_turn, n_turn and the board*/
+		std::list<Piece> move_player_piece(std::list<Piece>, Move *); //this makes a move by updating the piece and returning the list of players
+		std::list<Deleted> update_and_delete(std::list<Piece>); //TODO
+		std::list<Piece> delete_player(std::list<Piece>, std::list<Deleted>);
+		void update_player(std::list<Piece>, std::list<Piece>, int);
+		
+		/*Finds all trees*/
+		std::list<Tree> find_all_leaves(std::list<Piece>, std::list<Piece>, int);
+		
+		/*Shares the information in the leaf*/
+		std::list<Piece> share_player1();
+		Tree *create_new(int**, std::list<Piece>, std::list<Piece>, int, Move*);	
+		void update_board(int [][8]);
+		void print_board(); 	
+		Move *share_move();
 		int **share_board(); //this shares the board so that we can save it into the object
-		std::list<Deleted> make_temp_board(Move *); //TODO
+		std::list<Tree> share_branches(); 
 };
 
 #endif		

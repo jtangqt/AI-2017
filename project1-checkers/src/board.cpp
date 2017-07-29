@@ -1,10 +1,6 @@
 #include <iostream>
 #include <board.hpp>
-#include "colormod.h"
 
-Color::Modifier m_red(Color::FG_RED);
-Color::Modifier m_green(Color::FG_GREEN);
-Color::Modifier m_def(Color::FG_DEFAULT);
 
 Board::Board(int row, int col){  //sets dimension and initializes the board
 	this -> row = row;
@@ -13,33 +9,6 @@ Board::Board(int row, int col){  //sets dimension and initializes the board
 	for(int i = 0; i<row; i++){
 		arr[i] = (int*)malloc(col*sizeof(int));
 	}
-}
-
-void Board::print_board(){
-	cout << "_________________" << endl;
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				cout << "|";
-				switch(arr[i][j]){
-					case 0:
-						cout << " ";
-						break;
-					case 1:
-						cout << m_red << "*" << m_def;
-						break;
-					case 2:
-						cout << m_green << "*" << m_def;
-						break;
-					case 3:
-						cout << m_red << "O" << m_def;
-						break;
-					case 4:
-						cout << m_green << "O" << m_def;
-				}
-			}
-			cout << "|" << endl;
-		}
-		cout << "-----------------" << endl;
 }
 
 void Board::cust(int player_val, int piece_row, int piece_col){
@@ -76,8 +45,4 @@ int **Board::share_board(){
 	int **dest = (int**)malloc(row*col*sizeof(int));
 	memcpy(dest, arr, row*col*sizeof(int));
 	return dest; 
-}
-
-void Board::update_board(int **arr){
-	this -> arr = arr; 
 }

@@ -23,25 +23,24 @@ void print_list(Move* move_from_list, int i){
 
 }
 
-Move *determine_move(Tree &leaf, list<Piece> y_turn){
+Tree determine_move(list<Tree> leaves){
 
-	list<Move *> p_move; 
-	list<Move*>::iterator move_to_make; 
-	list<Move *>::iterator it; 
+	list<Tree>::iterator it; 
+	list<Tree>::iterator select_leaf;
 	int val, row, col, i = 0, j = 0; 
 
 	cout<<"Which move would you like to make?"<<endl;;
 
-	for(it = p_move.begin(); it != p_move.end(); it++){
-		print_list(*it, i);
+	for(it = leaves.begin(); it != leaves.end(); it++){
+		print_list(it -> share_move(), i);
 		i++;
 	}
 
-	while(j ==0){
+	while(j == 0){
 		cin>>val;
 		if(val >= 0 && val < i){
-			move_to_make = p_move.begin();
-			advance(move_to_make, val); 
+			select_leaf = leaves.begin();
+			advance(select_leaf, val); 
 			j = 1;
 		}
 		else{
@@ -49,7 +48,7 @@ Move *determine_move(Tree &leaf, list<Piece> y_turn){
 		}
 	}
 
-	return (*move_to_make); 
+	return (*select_leaf); 
 	
 }
 
@@ -59,6 +58,7 @@ int main(){
 	int x = 0, input_val = 1; 
 	int time = 0; 
 	Move *move_to_make;
+	list<Tree> branches;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board. "; 
 	cin >> val;   
 
@@ -71,7 +71,6 @@ int main(){
 		cout << "(0,0) is top-left corner; player 1 starts at the bottom of the board." <<endl; 
 		player1 = board.norm(1);
 		player2 = board.norm(2);
-		board.print_board(); 
 	}
 	else{
 		cout<< "1. Board is up vs. down \n2. Red is always on the bottom and always player 1.\n3. 1 - Player 1 (RED) \t 2 - Player 2 (GREEN) \t 3 - Player 1 King (RED) \t 4 - Player 2 King (GREEN)"<<endl; 
@@ -113,34 +112,27 @@ int main(){
 			}
 		}
 
-		board.print_board(); 
-
 		cout << "Player '1' or '2' starting first?. "; 
 		cin >> input_val;
 	}
 
-	Tree leaf(board.share_board(), player1, player2);
-		
+	Tree leaf(board.share_board(), player1, player2, NULL);
+	leaf.print_board(); 
+
 	if(input_val == 2){
-		move_to_make = determine_move(leaf, player2);
-		board.update_board(leaf.share_board());
-		player2 = leaf.move_player_piece(player2, move_to_make);
-		player1 = leaf.move_b_del_p(player1, move_to_make);
-		board.print_board(); 
+		branches = leaf.find_all_leaves(player2, player1, 2);
+		leaf = determine_move(branches);
+		leaf.print_board();
 	}
 
 	while (x == 0){
-		move_to_make = determine_move(leaf, player1);
-		board.update_board(leaf.share_board());
-		player1 = leaf.move_player_piece(player1, move_to_make);
-		player2 = leaf.move_b_del_p(player2, move_to_make);
-		board.print_board();
+		branches = leaf.find_all_leaves(player1, player2, 1);
+		leaf = determine_move(branches);
+		leaf.print_board();
 
-		move_to_make = determine_move(leaf, player2);
-		board.update_board(leaf.share_board());
-		player2 = leaf.move_player_piece(player2, move_to_make);
-		player1 = leaf.move_b_del_p(player1, move_to_make);
-		board.print_board();
+		branches = leaf.find_all_leaves(player2, player1, 2);
+		leaf = determine_move(branches);
+		leaf.print_board();
 		
 		cout << "Would you like to end the game?"<<endl;
 		cin >> end_val;

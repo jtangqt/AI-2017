@@ -11,11 +11,9 @@ class Board{
 		int row, col;  
 	public: 
 		Board(int, int); //sets dimension
-		void print_board(); 
 		void cust(int, int, int);
 		std::list<Piece> norm(int);
 	 	int **share_board(); 
-	 	void update_board(int **); 
 };
 
 #endif	
