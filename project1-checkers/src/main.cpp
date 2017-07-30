@@ -2,6 +2,7 @@
 #include <list>
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 #include "board.hpp"
 #include "tree.hpp"
@@ -52,11 +53,37 @@ Tree determine_move(list<Tree> leaves){
 	
 }
 
+void determine_surrender(Tree &leaf){
+	int win = leaf.evaluate_board(); 
+	cout << "HAHAHA I HAVE DEFEATED YOU!!\n"<< win <<endl; 
+	if (win > 0){
+		cout << "At this current state, you would've lost by: " << win << ".\n"; 
+	}
+	else if (win == 0){
+		cout << "At this current state, we are even in score.\n";
+	}
+	else{
+		cout << "At this current state, you would've won by: " << win << ".\n";
+	}
+}
+
+void determine_draw(Tree &leaf){
+	int win = leaf.evaluate_board(); 
+	if (win > 0){
+		cout << "At this current state, you would've lost by: " << win << ".\n"; 
+	}
+	else if (win == 0){
+		cout << "At this current state, we are even in score.\n";
+	}
+	else{
+		cout << "At this current state, you would've won by: " << win << ".\n";
+	}
+}
+
 int main(){
 	
-	char val, end_val; 
-	int x = 0, input_val = 1; 
-	int time = 0; 
+	char val; 
+	int option, end_val, x = 0, input_val = 1, ai_val, time_limit;
 	Move *move_to_make;
 	list<Tree> branches;
 	cout << "Type 'A' for a new game or 'B' for a customizeable board. "; 
@@ -76,12 +103,15 @@ int main(){
 		cout<< "1. Board is up vs. down \n2. Red is always on the bottom and always player 1.\n3. 1 - Player 1 (RED) \t 2 - Player 2 (GREEN) \t 3 - Player 1 King (RED) \t 4 - Player 2 King (GREEN)"<<endl; 
 
 		ifstream file;
-		file.open("../input.txt");
+		file.open("input.txt");
 
 		int p_val, value, k = 0; 
 		vector<int> temp_board; 
+		std::stringstream ss; 
 
 		while (file >> value) {
+			ss<<value; 
+			cout<<value; //TODO stackdumps when trying to customize the board 
 			temp_board.push_back(value);
 		}
 		
@@ -112,11 +142,36 @@ int main(){
 			}
 		}
 
-		cout << "Player '1' or '2' starting first?. "; 
+		cout << "Which player is starting first? (1/2)"; 
 		cin >> input_val;
 	}
 
-	Tree leaf(board.share_board(), player1, player2, 1, NULL);
+	cout<<"\n\nWhich Player is the AI? (1/2/3 for both) "; //TODO
+	cin>>ai_val;
+
+	bool ai_player[2];
+
+	if(ai_val == 1){
+		ai_player[0] = true;
+		ai_player[1] = false;
+	}
+	else if(ai_val == 2){
+		ai_player[0] = false;
+		ai_player[1] = true;
+	}
+	else{
+		cout << "In this case, I will optimize for player 1.\n"
+		ai_player[0] = true;
+		ai_player[1] = true;
+	}
+
+	cout << "What is the time limit? ";
+	cin >> time_limit;
+
+
+	Tree leaf(board.share_board(), player1, player2, 1, NULL, ai_player);
+
+	cout << "BEWARE: after both player 1 and player 2 have had a chance to move, I will prompt you to see if you want to end/surrender/request for a draw. In this scenario, picking surrender/request for draw will give you a score, ending will not give you a score."
 
 	if(input_val == 2){
 		leaf.print_board(); 
@@ -136,13 +191,25 @@ int main(){
 		branches.clear(); 
 		leaf.print_board();
 		
-		cout << "Would you like to end the game?"<<endl;
+		cout << "Would you like to end the game/see other options/continue? (1/2/3)"<<endl;
+		cout << "If you want to see your score, go to other options. ";
 		cin >> end_val;
-		if (end_val == 'Y'){
+		if (end_val == 1){
 			x = 1; 
 		}
-	}
+		if(end_val == 2){
+			cout << "What would you like to do? \n1. Request a draw\n2. Surrender ";
+			cin >> option; 
+			if (option == 1){	
+				determine_draw(leaf); 
+			}
+			else if(option == 2){
+	 			determine_surrender(leaf);
+			}
+		}
 
+		
+	}
 	//TODO 
 	//seg fault when jumping second time from a side space
 }

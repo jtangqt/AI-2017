@@ -6,7 +6,7 @@ Color::Modifier m_red(Color::FG_RED);
 Color::Modifier m_green(Color::FG_GREEN);
 Color::Modifier m_def(Color::FG_DEFAULT);
 
-Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *branch_move){
+Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *branch_move, bool ai_player[2]){
 	arr = (int **)malloc(row*sizeof(int *));
 	for(int i = 0; i<8; i++){
 		arr[i] = (int*)malloc(col*sizeof(int));
@@ -21,6 +21,8 @@ Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Mov
 		player2.splice(player2.begin(), y_turn);
 		player1.splice(player1.begin(), n_turn);
 	}
+
+	ai_player = ai_player; 
 
 	move_to_make = branch_move; 
 
@@ -288,7 +290,7 @@ Tree *Tree::create_new(int **a_board, list<Piece> y_turn, list<Piece> n_turn, in
 	list<Piece> new_y_turn, new_n_turn;
 	list<Deleted> to_delete; 
 
-	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, p_num, move_to_make); 
+	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, p_num, move_to_make, this -> ai_player); 
 		
 	new_y_turn = leaf -> move_player_piece(y_turn, move_to_make);
 	to_delete = leaf -> update_and_delete(n_turn);
@@ -334,4 +336,13 @@ void Tree::print_board(){
 			cout << "|" << endl;
 		}
 		cout << "-----------------" << endl;
+}
+
+int Tree::evaluate_board(){
+	int a; 
+	return a; 
+}
+
+void Tree::update_ai(bool ai_player[2]){
+	this -> ai_player = ai_player; 
 }

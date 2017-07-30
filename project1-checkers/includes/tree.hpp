@@ -13,10 +13,12 @@ class Tree{
 		Move *move_to_make;
  		std::list<Tree> branches;
  		std::list<Piece> player1;
- 		std::list<Piece> player2;  
+ 		std::list<Piece> player2; 
+ 		int time_limit; 
+ 		bool *ai_player; 
 	public: 
 		/*Constructor*/
-		Tree(int**, std::list<Piece>, std::list<Piece>, int, Move *);
+		Tree(int**, std::list<Piece>, std::list<Piece>, int, Move *, bool[2]);
 		
 		/* Gets all possible moves and jumps */
 		std::list<Move*> get_all_possible_moves(std::list <Piece>);
@@ -37,6 +39,11 @@ class Tree{
 		Move *share_move();
 		int **share_board(); //this shares the board so that we can save it into the object
 		std::list<Tree> share_branches(); 
+
+		/*AI Portion*/
+		int evaluate_board(); //takes in the arr/player and determines the score (can be simple)
+		void update_ai(bool[2]); 
+		void iterative_deepening(std::list<Tree>); 
 };
 
 #endif		
