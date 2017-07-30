@@ -116,22 +116,24 @@ int main(){
 		cin >> input_val;
 	}
 
-	Tree leaf(board.share_board(), player1, player2, NULL);
-	leaf.print_board(); 
+	Tree leaf(board.share_board(), player1, player2, 1, NULL);
 
 	if(input_val == 2){
-		branches = leaf.find_all_leaves(player2, player1, 2);
+		leaf.print_board(); 
+		branches = leaf.find_all_leaves(2);
 		leaf = determine_move(branches);
-		leaf.print_board();
 	}
 
 	while (x == 0){
-		branches = leaf.find_all_leaves(player1, player2, 1);
+		leaf.print_board(); 
+		branches = leaf.find_all_leaves(1);
 		leaf = determine_move(branches);
+		branches.clear(); 
+		
 		leaf.print_board();
-
-		branches = leaf.find_all_leaves(player2, player1, 2);
+		branches = leaf.find_all_leaves(2);
 		leaf = determine_move(branches);
+		branches.clear(); 
 		leaf.print_board();
 		
 		cout << "Would you like to end the game?"<<endl;

@@ -6,16 +6,21 @@ Color::Modifier m_red(Color::FG_RED);
 Color::Modifier m_green(Color::FG_GREEN);
 Color::Modifier m_def(Color::FG_DEFAULT);
 
-Tree::Tree(int **a_board, list<Piece> player1, list<Piece> player2, Move *branch_move){
-	arr = (int **)malloc(row*col*sizeof(int *));
+Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *branch_move){
+	arr = (int **)malloc(row*sizeof(int *));
 	for(int i = 0; i<8; i++){
 		arr[i] = (int*)malloc(col*sizeof(int));
+		memcpy(arr[i], a_board[i], col*sizeof(int));
 	}
 
-	memcpy(arr, a_board, row*col*sizeof(int));
-
-	this -> player1 = player1; 
-	this -> player2 = player2; 
+	if(p_num == 1){
+		player1.splice(player1.begin(), y_turn);
+		player2.splice(player2.begin(), n_turn);
+	}
+	else{
+		player2.splice(player2.begin(), y_turn);
+		player1.splice(player1.begin(), n_turn);
+	}
 
 	move_to_make = branch_move; 
 
@@ -28,7 +33,7 @@ list<Move*> Tree::get_possible_jumps(int **a_board, int row, int col, int player
 
 	if((is_king==1 || player_num == 1) && a_board[row-1][col-1] % 2 == player_num-1 && a_board[row-1][col-1] && row-1>=0 && col-1>=0){ // If player 2 piece is there (even)
 		if(a_board[row-2][col-2] == 0 && row-2>=0 && col-2>=0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
+			memcpy(temp_board, a_board, 8*sizeof(int*)); // Copy board
 			temp_board[row-2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col-1] = 0;
@@ -50,7 +55,7 @@ list<Move*> Tree::get_possible_jumps(int **a_board, int row, int col, int player
 	}
 	if((is_king==1 || player_num == 1) && a_board[row-1][col+1] % 2 == player_num-1 && a_board[row-1][col+1] && row-1>=0 && col+1<=7){ // If player 2 piece is there (even)
 		if(a_board[row-2][col+2] == 0 && row-2>=0 && col+2<=7){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
+			memcpy(temp_board, a_board, 8*sizeof(int*)); // Copy board
 			temp_board[row-2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row-1][col+1] = 0;;
@@ -72,7 +77,7 @@ list<Move*> Tree::get_possible_jumps(int **a_board, int row, int col, int player
 	}
 	if((is_king==1 || player_num == 2) && (a_board[row+1][col-1] % 2 == player_num-1) && a_board[row+1][col-1] && row+1<=7 && col-1>=0){ // If king and player 2 piece is there (even)
 		if(a_board[row+2][col-2] == 0 && row+2<=7 && col-2>=0){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
+			memcpy(temp_board, a_board, 8*sizeof(int*)); // Copy board
 			temp_board[row+2][col-2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row+1][col-1] = 0;;
@@ -94,7 +99,7 @@ list<Move*> Tree::get_possible_jumps(int **a_board, int row, int col, int player
 	}
 	if((is_king==1 || player_num == 2) && (a_board[row+1][col+1] % 2 == player_num-1) && a_board[row+1][col+1] && row+1<=7 && col+1<= 7){ // If king and player 2 piece is there (even)
 		if(a_board[row+2][col+2] == 0 && row+2<=7 && col+2<=7){	// Can jump
-			memcpy(temp_board, a_board, 8*8*sizeof(int)); // Copy board
+			memcpy(temp_board, a_board, 8*sizeof(int*)); // Copy board
 			temp_board[row+2][col+2] = temp_board[row][col]; // Update board
 			temp_board[row][col] = 0;
 			temp_board[row+1][col+1] = 0;;
@@ -129,8 +134,9 @@ list<Move*> Tree::get_all_possible_moves(list <Piece> y_turn){// HERE!! it's not
 		col = it -> get_col();
 		player_num = it -> get_player_num(); 
 		is_king = it -> is_king(); 
+		//cout << "(" << row<< ","<< col << ")"<<endl; 
 
-		pos_jumps = get_possible_jumps(arr, row, col, player_num, is_king);
+		pos_jumps = get_possible_jumps({this -> share_board()}, row, col, player_num, is_king);
 		all_pos_jumps.merge(pos_jumps);
 	}
 
@@ -176,7 +182,6 @@ list<Piece> Tree::move_player_piece(list<Piece> y_turn, Move *move_to_make){
 	for(y_it = y_turn.begin(); y_it != y_turn.end(); y_it++){
 		if(y_it -> get_row() == curr_row && y_it -> get_col() == curr_col){
 			y_it -> update_piece(move_to_make);
-			//cout << "(" << curr_row<< ","<< curr_col << ")"<<endl; 
 		}
 	}
 
@@ -206,7 +211,7 @@ std::list<Deleted> Tree::update_and_delete(list<Piece> n_turn){
 			Deleted new_delete(del_row, del_col);
 			to_delete.push_back(new_delete);
 		}
-		current = current ->get_next();  
+		current = current -> get_next();  
 	} 
 	
 	int p_val = arr[beg_row][beg_col];
@@ -216,20 +221,10 @@ std::list<Deleted> Tree::update_and_delete(list<Piece> n_turn){
 		p_val = p_val + 2;  
 	}
 
-	arr[new_row][new_col] = p_val; 
-
-//	this -> update_board(temp_board);
+	arr[new_row][new_col] = p_val;
 	
 	return to_delete; 
 } 
-
-// void Tree::update_board(int temp_board[][8]){
-// 	for(int i = 0; i < 8; i++){
-// 		for (int j = 0; j < 8; j++){
-// 			(*arr)[i][j] = temp_board[i][j]; 
-// 		}
-// 	}
-// }
 
 std::list<Piece> Tree::delete_player(list<Piece> n_turn, list<Deleted> to_delete){
 	list<Piece>::iterator n_it; 
@@ -247,21 +242,33 @@ std::list<Piece> Tree::delete_player(list<Piece> n_turn, list<Deleted> to_delete
 }
 
 void Tree::update_player(list<Piece> y_turn, list<Piece>n_turn, int p_num){
+	player1.clear(); 
+	player2.clear(); 
+
 	if(p_num == 1){
-		player1 = y_turn;
-		player2 = n_turn;
+		player1.splice(player1.begin(), y_turn);
+		player2.splice(player2.begin(), n_turn);
 	}
 	else{
-		player2 = y_turn;
-		player1 = n_turn; 
+		player2.splice(player2.begin(), y_turn);
+		player1.splice(player1.begin(), n_turn);
 	}
 }
 
-std::list<Tree> Tree::find_all_leaves(list<Piece> y_turn, list<Piece> n_turn, int p_num){
+std::list<Tree> Tree::find_all_leaves(int p_num){
 	list<Move *> p_move;
 	list<Move *>::iterator it; 
-	list<Piece>::iterator n_it;
+	list<Piece> y_turn, n_turn; 
 	int **a_board = {this->share_board()};
+
+	if(p_num == 1){
+		y_turn.splice(y_turn.begin(), player1);
+		n_turn.splice(n_turn.begin(), player2);
+	}
+	else{
+		y_turn.splice(y_turn.begin(), player2);
+		n_turn.splice(n_turn.begin(), player1);
+	}
 	
 	p_move = get_all_possible_moves(y_turn);
 
@@ -277,29 +284,24 @@ std::list<Tree> Tree::find_all_leaves(list<Piece> y_turn, list<Piece> n_turn, in
 
 Tree *Tree::create_new(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *move_to_make){
 	int temp_board[8][8];
-	memcpy(temp_board, a_board, 8*8*sizeof(int));
+	memcpy(temp_board, a_board, 8*sizeof(int*));
 	list<Piece> new_y_turn, new_n_turn;
 	list<Deleted> to_delete; 
 
-	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, move_to_make); 
+	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, p_num, move_to_make); 
 		
-	leaf -> print_board(); 
-
 	new_y_turn = leaf -> move_player_piece(y_turn, move_to_make);
 	to_delete = leaf -> update_and_delete(n_turn);
 	new_n_turn = leaf -> delete_player(n_turn, to_delete); 
-			
+
 	leaf -> update_player(new_y_turn, new_n_turn, p_num);
 
 	return leaf; 
 }
 
-
-list<Piece> Tree::share_player1(){ return player1; }
-
 int **Tree::share_board(){
-	int **dest = (int**)malloc(row*col*sizeof(int));
-	memcpy(dest, arr, row*col*sizeof(int));
+	int **dest = (int**)malloc(row*sizeof(int*));
+	memcpy(dest, arr, row*sizeof(int*));
 	return dest;
 }
 
