@@ -160,7 +160,7 @@ int main(){
 		ai_player[1] = true;
 	}
 	else{
-		cout << "In this case, I will optimize for player 1.\n"
+		cout << "In this case, I will optimize for player 1.\n";
 		ai_player[0] = true;
 		ai_player[1] = true;
 	}
@@ -169,9 +169,9 @@ int main(){
 	cin >> time_limit;
 
 
-	Tree leaf(board.share_board(), player1, player2, 1, NULL, ai_player);
+	Tree leaf(board.share_board(), player1, player2, 1, NULL, ai_player, NULL); //TODO for share_board(); 
 
-	cout << "BEWARE: after both player 1 and player 2 have had a chance to move, I will prompt you to see if you want to end/surrender/request for a draw. In this scenario, picking surrender/request for draw will give you a score, ending will not give you a score."
+	cout << "BEWARE: after both player 1 and player 2 have had a chance to move, I will prompt you to see if you want to end/surrender/request for a draw. In this scenario, picking surrender/request for draw will give you a score, ending will not give you a score.\n";
 
 	if(input_val == 2){
 		leaf.print_board(); 

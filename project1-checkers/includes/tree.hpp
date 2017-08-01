@@ -14,11 +14,15 @@ class Tree{
  		std::list<Tree> branches;
  		std::list<Piece> player1;
  		std::list<Piece> player2; 
- 		int time_limit; 
+ 		int time_limit, p_num, score;
  		bool *ai_player; 
+ 		Tree *parent; 
 	public: 
 		/*Constructor*/
-		Tree(int**, std::list<Piece>, std::list<Piece>, int, Move *, bool[2]);
+		Tree(int**, std::list<Piece>, std::list<Piece>, int, Move *, bool[2], Tree*);
+
+		/*Destructor*/
+		//~Tree(); 
 		
 		/* Gets all possible moves and jumps */
 		std::list<Move*> get_all_possible_moves(std::list <Piece>);
@@ -32,7 +36,7 @@ class Tree{
 		
 		/*Finds all trees*/
 		std::list<Tree> find_all_leaves(int);
-		Tree *create_new(int**, std::list<Piece>, std::list<Piece>, int, Move*);	
+		Tree *create_new(int**, std::list<Piece>, std::list<Piece>, int, Move*, Tree*);	
 		
 		/*Shares the information in the leaf*/
 		void print_board(); 	
@@ -42,8 +46,7 @@ class Tree{
 
 		/*AI Portion*/
 		int evaluate_board(); //takes in the arr/player and determines the score (can be simple)
-		void update_ai(bool[2]); 
-		void iterative_deepening(std::list<Tree>); 
+		list<Tree> get_all_branches(list<Tree>);
 };
 
 #endif		

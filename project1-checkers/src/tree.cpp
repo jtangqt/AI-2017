@@ -6,7 +6,7 @@ Color::Modifier m_red(Color::FG_RED);
 Color::Modifier m_green(Color::FG_GREEN);
 Color::Modifier m_def(Color::FG_DEFAULT);
 
-Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *branch_move, bool ai_player[2]){
+Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *branch_move, bool ai_player[2], Tree *parent){
 	arr = (int **)malloc(row*sizeof(int *));
 	for(int i = 0; i<8; i++){
 		arr[i] = (int*)malloc(col*sizeof(int));
@@ -22,11 +22,11 @@ Tree::Tree(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Mov
 		player1.splice(player1.begin(), n_turn);
 	}
 
-	ai_player = ai_player; 
-
+	this -> ai_player = ai_player; 
+	this -> parent = parent; 
 	move_to_make = branch_move; 
 
-}
+}	
 
 list<Move*> Tree::get_possible_jumps(int **a_board, int row, int col, int player_num, bool is_king){//HERE!! it's not the object part; it should be sharing an array now
 	list<Move*> pos_jumps; 
@@ -276,7 +276,7 @@ std::list<Tree> Tree::find_all_leaves(int p_num){
 
 	for(it = p_move.begin(); it != p_move.end(); it++){		
 
-		Tree *leaf = create_new(a_board, y_turn, n_turn, p_num, (*it));
+		Tree *leaf = create_new(a_board, y_turn, n_turn, p_num, (*it), this);
 			
 		branches.push_back(*leaf);
 	}
@@ -284,13 +284,13 @@ std::list<Tree> Tree::find_all_leaves(int p_num){
 	return branches; 
 }
 
-Tree *Tree::create_new(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *move_to_make){
+Tree *Tree::create_new(int **a_board, list<Piece> y_turn, list<Piece> n_turn, int p_num, Move *move_to_make, Tree *old_leaf){
 	int temp_board[8][8];
 	memcpy(temp_board, a_board, 8*sizeof(int*));
 	list<Piece> new_y_turn, new_n_turn;
 	list<Deleted> to_delete; 
 
-	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, p_num, move_to_make, this -> ai_player); 
+	Tree *leaf = new Tree((int**)temp_board, y_turn, n_turn, p_num, move_to_make, this -> ai_player, old_leaf); 
 		
 	new_y_turn = leaf -> move_player_piece(y_turn, move_to_make);
 	to_delete = leaf -> update_and_delete(n_turn);
@@ -339,10 +339,18 @@ void Tree::print_board(){
 }
 
 int Tree::evaluate_board(){
-	int a; 
-	return a; 
+	score = 3; 
+	return score; 
 }
 
-void Tree::update_ai(bool ai_player[2]){
-	this -> ai_player = ai_player; 
+list<Tree> Tree::get_all_branches(list<Tree> branches){
+	list<Tree>::iterator it; 
+	list<Tree> temp_branch, new_branches;
+
+	for(it = branches.begin(); it != branches.end(); it ++){
+		temp_branch = (*it).share_branches(); 
+		new_branches.splice(new_branches.begin(), temp_branch); 
+	}
+
+	return new_branches; 
 }
