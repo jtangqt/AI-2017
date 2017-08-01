@@ -75,7 +75,7 @@ void Depth::iterative_deepening(list<Tree> branches, int p_num, int depth){ //th
 		new_branches.splice(new_branches.begin(), leaves);
 	}
 	Depth *new_depth = new depth(depth, new_branches); 
-	entire_depth.push_back(new_depth);
+	branches.set_next(new_depth);
 	iterative_deepening(new_branches, new_p_num, depth+1);
 }
 
