@@ -1,11 +1,11 @@
 prompt = 'What is the name of the text file with the initial neural network? ';
-init_neural_net = input(prompt,'s');
+init_neural_net = input(prompt,'s'); %init_neural_net.txt
 
 prompt = 'What is the name of the text file with the training set? ';
-training_set = input(prompt,'s');
+training_set = input(prompt,'s'); %training_set.txt
 
 prompt = 'What is the name of the text file for the output? ';
-output_file = input(prompt,'s');
+output_file = input(prompt,'s'); %my_trained_nn.txt
 
 init = importfile(init_neural_net); 
 trained = importfile(training_set); 
