@@ -11,14 +11,12 @@ weights_outer = init(hidden_nodes+2:end, :); % weights of edges pointing from hi
 weights_outer(isnan(weights_outer)) = []; 
 
 while (m < epoch)
-   for t = 1:n
-       a_1 = X(t, :); 
-       a_1 = [-1; a_1']; 
+   for t = 2:n
+       a_1 = [-1; X(t,:)']; 
       
        %For hidden layer
        in_i = weights_inner*a_1; 
-       a_2 = sigmoid(in_i); 
-       a_2 = [-1; a_2]; 
+       a_2 = [-1; sigmoid(in_i)]; 
       
        %For output layer
        in_j = weights_outer*a_2; 
