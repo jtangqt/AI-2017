@@ -7,20 +7,26 @@ training_set = input(prompt,'s'); %training_set.txt
 prompt = 'What is the name of the text file for the output? ';
 output_file = input(prompt,'s'); %my_trained_nn.txt
 
-init = importfile(init_neural_net); 
-trained = importfile(training_set); 
+prompt = 'How many number of epochs do you want? ';
+epochs = input(prompt); 
+
+prompt = 'What is the value of alpha? ';
+alpha = input(prompt); 
+
+init = dlmread(init_neural_net); 
+trained = dlmread(training_set); 
 
 input_nodes = init(1,1); % # of input nodes
 
-X = trained(:, 1:input_nodes); 
-y = trained(:, input_nodes+1); 
+X = trained(2:end, 1:input_nodes);
+y = trained(2:end, input_nodes+1:end);
 
-neural_net = BackProp(X, y, init, 1, 0.1); 
+neural_net = BackProp(X, y, init, epochs, alpha); 
 
 fid = fopen(output_file, 'wt'); % Open for writing
 for i=1:size(neural_net,1)
     for j = 1:size(neural_net, 2)
-        if(isnan(neural_net(i, j)))
+        if(neural_net(i, j) == 0)
         elseif (i == 1)
             fprintf(fid, '%d ', neural_net(i,j)); 
         else
