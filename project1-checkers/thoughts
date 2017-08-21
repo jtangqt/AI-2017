@@ -1,0 +1,53 @@
+Board
+Pieces
+Moves
+
+
+normal
+customize
+
+start game:
+1. player one gets all of the moves that they can make
+	a. find all possible jumps
+	b. find all possible moves (if no jumps, then just moves)
+2. player one chooses which move they want to make
+	a. prints out all of the moves 
+	b. player then decides which move they want to make
+	c. move the piece
+3. go to the next player/draw/quit 
+
+
+functions that will be needed
+1. initialize normal board  -> void -> updates arr in board obj
+1. initialize customizable board -> void -> updates arr in board obj
+4. get all possible jumps -> board, player piece -> moves
+4. get all possible moves -> board, player piece -> moves
+4. move the piece depending on what player one wants -> player, board, moves -> emptied moves, updated arr in board obj, updated pieces list 
+	1. move piece -> the move (curr row and col; next row and col), player num, list of pieces -> updated arr in board obj
+		2. delete piece -> row and col of piece  -> updates the list of pieces
+		2. update position of piece -> the move (curr row and col, next row and col) -> updates row and col value in list of pieces
+	3. move piece (delete the empty move list) -> the moves -> void
+4. go to the next player 
+4. draw
+4. quit
+4. restart
+4. watch them play on their own
+
+
+
+all functions 
+
+main() 
+void print_list(Move* move_from_list, int i)
+Move *determine_move(Tree &leaf, list<Piece> y_turn)
+
+
+deleted
+
+
+board
+Board::Board(int row, int col)
+int **Board::share_board()
+std::list<Deleted> Board::update_board
+
+piece
