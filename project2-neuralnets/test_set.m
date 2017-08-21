@@ -3,11 +3,11 @@ function [table] = test_set(X, y, trained_nn)
 m = size(X, 1); 
 
 output_nodes = trained_nn(1,3); 
+hidden_nodes = trained_nn(1,2);
 
 table = zeros(output_nodes, 4); 
 y_pred = zeros(1,output_nodes); 
 
-hidden_nodes = trained_nn(1,2);
 weights_pre_inner = trained_nn(2:hidden_nodes+1, :); 
 weights_pre_outer = trained_nn(hidden_nodes+2:end, :); 
 weights_inner = weights_pre_inner(:, 1:size(X,2)+1);

@@ -1,4 +1,4 @@
-mat = dlmread('new_training_set.txt');
+mat = dlmread('new_test_set.txt');
 
 % new_vector = mat(:, 8); 
 % output_vector = zeros(size(new_vector, 1), 5); 
@@ -20,13 +20,13 @@ mat = dlmread('new_training_set.txt');
 % 
 % new_mat = [mat(:, 1:8), output_vector];
 
-mat = [mat(:, 1:7), mat(:, 9:end)]
+new_mat = [mat(:, 1:7), mat(:, 9:end)];
 
 
-fid = fopen('new_training_set.txt', 'wt'); % Open for writing
+fid = fopen('new_test_set.txt', 'wt'); % Open for writing
     for i=1:size(new_mat,1)
         for j = 1:size(new_mat, 2)
-            if (j > 8)
+            if (j > 7)
                 fprintf(fid, '%d ', new_mat(i,j)); 
             else
                 fprintf(fid, '%.3f ', new_mat(i,j));

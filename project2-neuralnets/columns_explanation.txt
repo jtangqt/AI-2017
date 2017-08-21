@@ -8,3 +8,14 @@ output nodes: 4 values
 2. 1.38 - 1.40
 3. 1.40 - 1.42
 4. 1.42 - 1.44
+
+hidden nodes * input nodes + 1
+output nodes * hidden nodes + 1
+
+input nodes: 7
+output nodes: 5
+hidden nodes: 10
+10*8+5*11 = 135
+
+hidden nodes: 15
+15*8+5*16 = 200
