@@ -10,12 +10,12 @@ function fid = test()
     output_file = input(prompt,'s'); %results.txt
 
     trained_nn = dlmread(trained_nn_file);
-    test = dlmread(test_file); 
+    test_val = dlmread(test_file); 
 
     input_nodes = trained_nn(1,1); % # of input nodes
 
-    X = test(2:end, 1:input_nodes); 
-    y = test(2:end, input_nodes+1:end); 
+    X = test_val(2:end, 1:input_nodes); 
+    y = test_val(2:end, input_nodes+1:end); 
 
     table = test_set(X, y, trained_nn); 
 

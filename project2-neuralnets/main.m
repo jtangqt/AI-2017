@@ -7,10 +7,10 @@ while (i == 0)
         training;
         prompt = 'Would you like to now test this trained neural network? (Y/N) '; 
         answer = input(prompt, 's'); 
-        if(answer == 'Y')
+        if(strcmp(answer, 'Y'))
             %something
-            train_test = 'test'; 
-        elseif(answer == 'N')
+            train_test = 'test';
+        elseif(strcmp(answer, 'N'))
             %something else
             i = 1; 
         end

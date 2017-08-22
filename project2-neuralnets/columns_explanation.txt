@@ -14,8 +14,8 @@ output nodes * hidden nodes + 1
 
 input nodes: 7
 output nodes: 5
-hidden nodes: 10
-10*8+5*11 = 135
-
 hidden nodes: 15
 15*8+5*16 = 200
+
+epochs: 100
+alpha: 0.1

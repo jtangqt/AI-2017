@@ -20,6 +20,7 @@ for i = 1:m
    in_j = weights_outer*a_2; 
    h = sigmoid(in_j); 
    
+   y_pred = zeros(1,output_nodes); 
    for j = 1:size(y, 2) 
        if(h(j) < 0.5)
            y_pred(j) = 0;
