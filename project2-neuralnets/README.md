@@ -1,4 +1,4 @@
-#Project 2 - Training and Testing of Neural Networks
+# Project 2 - Training and Testing of Neural Networks
 
 This is the second project for AI Independent Study with Professor Sable. 
 
