@@ -3,7 +3,7 @@
 This is the second project for AI Independent Study with Professor Sable. 
 
 ## How to Run:
-Run main.m through either MATLAB or Octave
+Run main.m through either MATLAB or Octave. The dataset I created is inside the dataset directory. It includes an initial neural network, a training set and a test set. 
 
 ## Dataset Explanation:
 I found a dataset online for SPY. SPY is an ETF that I'm particularly fond of and following. 
